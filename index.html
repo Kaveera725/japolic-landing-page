@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japolic — Protocol Enforcement &amp; Routing for Internal Services</title>
+  <meta name="description" content="Japolic sits between services as a lightweight, stateless routing plane. It holds protocol negotiation, policy enforcement, and structured failure handling.">
+  
+  <!-- Single Source of Truth Stylesheets -->
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ============================================================
+       00 — NAVIGATION
+       ============================================================ -->
+  <header class="site-header" id="site-header">
+    <div class="nav-container">
+      <div class="brand-group">
+        <a href="#hero" class="brand-wordmark" aria-label="Japolic Homepage">Japolic</a>
+        <span class="brand-version">v1.0</span>
+      </div>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="#problem" class="nav-link">Problem</a></li>
+          <li><a href="#solution" class="nav-link">Architecture</a></li>
+          <li><a href="#feature" class="nav-link">Policy Plane</a></li>
+          <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
+          <li><a href="assets.html" class="nav-link">Asset Library</a></li>
+          <li><a href="direction.html" class="nav-link">Direction Board</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#request-access" class="btn-ghost">Request Access &rarr;</a>
+        <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+          Menu
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Collapsible Mobile Navigation Drawer -->
+  <div class="mobile-nav-drawer" id="mobile-nav" aria-hidden="true">
+    <a href="#problem" class="nav-link mobile-link">Problem</a>
+    <a href="#solution" class="nav-link mobile-link">Architecture</a>
+    <a href="#feature" class="nav-link mobile-link">Policy Plane</a>
+    <a href="#use-cases" class="nav-link mobile-link">Use Cases</a>
+    <a href="assets.html" class="nav-link mobile-link">Asset Library</a>
+    <a href="direction.html" class="nav-link mobile-link">Direction Board</a>
+    <a href="#request-access" class="btn-primary" style="margin-top: 12px; width: 100%; text-align: center;">Request Access &rarr;</a>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ============================================================
+         01 — HERO
+         ============================================================ -->
+    <section class="hero-section" id="hero" aria-labelledby="hero-title">
+      <!-- Background SVG Dot Grid -->
+      <div class="hero-backdrop" aria-hidden="true">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="var(--c-hairline)"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-dot-grid)"/>
+        </svg>
+      </div>
+
+      <div class="container hero-content">
+        <!-- 7-Column Left Content -->
+        <div class="hero-text-col">
+          <span class="label">01 &mdash; Hero</span>
+          <h1 class="hero-h1" id="hero-title">
+            Services talk. Nobody agrees on the <em>rules</em>.
+          </h1>
+          <p class="hero-sub">
+            Every internal service boundary is a handshake negotiated ad hoc. When services call each other, integration logic lives in application code &mdash; duplicated across teams, inconsistently enforced, and opaque in failure. Japolic makes every contract explicit.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#request-access" class="btn-primary">Request Access &rarr;</a>
+            <a href="#solution" class="text-arrow-link">
+              Read the docs <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+
+          <div style="margin-top: var(--sp-32);">
+            <div class="status-chip">
+              <span class="status-dot ok"></span>
+              <span>PROTOCOL RUNTIME ACTIVE &middot; DETERMINISTIC ENFORCEMENT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5-Column Right: Isometric Server Rack Line Drawing -->
+        <div class="hero-diagram-col">
+          <div class="hero-diagram-frame" role="img" aria-label="Isometric technical drawing of a server rack with Japolic routing plane highlighted in amber">
+            <!-- Engineering corner marks -->
+            <div class="reg-mark-tl"></div>
+            <div class="reg-mark-tr"></div>
+            <div class="reg-mark-bl"></div>
+            <div class="reg-mark-br"></div>
+
+            <svg width="100%" height="auto" viewBox="0 0 520 380" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+              <defs>
+                <marker id="arr-amber-hero" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0.5 L5,3 L0,5.5 Z" fill="var(--c-amber)"/>
+                </marker>
+              </defs>
+
+              <!-- Rack Outer Shell Front Face -->
+              <polygon points="100,330 240,410 380,330 380,90 240,170 100,90"
+                       fill="rgba(244,238,225,0.025)"
+                       stroke="rgba(244,238,225,0.55)" stroke-width="1"/>
+              <!-- Top Face -->
+              <polygon points="100,90 240,170 380,90 240,10"
+                       fill="rgba(244,238,225,0.05)"
+                       stroke="rgba(244,238,225,0.55)" stroke-width="1"/>
+              <!-- Right Side Face -->
+              <polygon points="380,90 380,330 510,250 510,10"
+                       fill="rgba(244,238,225,0.035)"
+                       stroke="rgba(244,238,225,0.3)" stroke-width="1"/>
+
+              <!-- Rack Unit Dividers -->
+              <g stroke="rgba(244,238,225,0.18)" stroke-width="0.75">
+                <line x1="104" y1="115" x2="376" y2="115"/>
+                <line x1="108" y1="145" x2="377" y2="145"/>
+                <line x1="112" y1="175" x2="378" y2="175"/>
+                <line x1="116" y1="205" x2="379" y2="205"/>
+                <line x1="120" y1="235" x2="380" y2="235"/>
+                <line x1="124" y1="265" x2="381" y2="265"/>
+                <line x1="128" y1="295" x2="382" y2="295"/>
+              </g>
+
+              <!-- U1 — JAPOLIC ROUTING PLANE (Amber Accent) -->
+              <polygon points="108,115 240,190 377,115 377,145 240,220 108,145"
+                       fill="rgba(217,130,43,0.12)"
+                       stroke="var(--c-amber)" stroke-width="1.25"/>
+              <circle cx="126" cy="130" r="3" fill="var(--c-amber)" opacity="0.9"/>
+              <circle cx="135" cy="130" r="3" fill="var(--c-green)" opacity="0.8"/>
+              <circle cx="144" cy="130" r="3" fill="var(--c-green)" opacity="0.8"/>
+              <text x="158" y="134" font-family="var(--font-mono)" font-size="8"
+                    fill="rgba(244,238,225,0.85)" letter-spacing="0.06em">JAPOLIC &middot; ROUTING PLANE</text>
+
+              <!-- U2 — APP SVC 01 -->
+              <polygon points="112,145 240,220 378,145 378,175 240,250 112,175"
+                       fill="rgba(244,238,225,0.03)"
+                       stroke="rgba(244,238,225,0.18)" stroke-width="0.75"/>
+              <circle cx="130" cy="160" r="2.5" fill="var(--c-green)" opacity="0.7"/>
+              <text x="142" y="163" font-family="var(--font-mono)" font-size="7"
+                    fill="rgba(244,238,225,0.4)" letter-spacing="0.06em">APP SVC &mdash; 01</text>
+
+              <!-- U3 — APP SVC 02 -->
+              <polygon points="116,175 240,250 379,175 379,205 240,280 116,205"
+                       fill="rgba(244,238,225,0.03)"
+                       stroke="rgba(244,238,225,0.18)" stroke-width="0.75"/>
+              <circle cx="134" cy="190" r="2.5" fill="var(--c-green)" opacity="0.7"/>
+              <text x="146" y="193" font-family="var(--font-mono)" font-size="7"
+                    fill="rgba(244,238,225,0.4)" letter-spacing="0.06em">APP SVC &mdash; 02</text>
+
+              <!-- U4 — Empty -->
+              <polygon points="120,205 240,280 380,205 380,235 240,310 120,235"
+                       fill="rgba(244,238,225,0.01)"
+                       stroke="rgba(244,238,225,0.10)" stroke-width="0.75"/>
+
+              <!-- U5 — Storage -->
+              <polygon points="124,235 240,310 381,235 381,265 240,340 124,265"
+                       fill="rgba(244,238,225,0.03)"
+                       stroke="rgba(244,238,225,0.18)" stroke-width="0.75"/>
+              <circle cx="142" cy="250" r="2.5" fill="var(--c-muted)" opacity="0.6"/>
+              <text x="154" y="253" font-family="var(--font-mono)" font-size="7"
+                    fill="rgba(244,238,225,0.4)" letter-spacing="0.06em">STORAGE &mdash; NVMe</text>
+
+              <!-- U6 — Empty -->
+              <polygon points="128,265 240,340 382,265 382,295 240,370 128,295"
+                       fill="rgba(244,238,225,0.01)"
+                       stroke="rgba(244,238,225,0.08)" stroke-width="0.75"/>
+
+              <!-- Right Face Bus & Channel -->
+              <g stroke="rgba(244,238,225,0.12)" stroke-width="1">
+                <line x1="400" y1="30" x2="400" y2="310"/>
+                <line x1="420" y1="22" x2="420" y2="300"/>
+                <line x1="440" y1="16" x2="440" y2="290"/>
+                <line x1="460" y1="12" x2="460" y2="280"/>
+                <line x1="480" y1="10" x2="480" y2="270"/>
+              </g>
+
+              <!-- Amber Cable Route -->
+              <g stroke="rgba(217,130,43,0.45)" stroke-width="1.5">
+                <line x1="382" y1="128" x2="440" y2="100"/>
+                <line x1="382" y1="134" x2="440" y2="106"/>
+              </g>
+
+              <!-- Incoming Request Vector -->
+              <path d="M 42,210 L 106,172"
+                    stroke="var(--c-amber)" stroke-width="1"
+                    fill="none" opacity="0.9"
+                    marker-end="url(#arr-amber-hero)"/>
+              <path d="M 240,198 L 240,218"
+                    stroke="var(--c-amber)" stroke-width="1"
+                    fill="none" opacity="0.7"
+                    marker-end="url(#arr-amber-hero)"/>
+
+              <text x="8" y="204" font-family="var(--font-mono)" font-size="8"
+                    fill="var(--c-amber)" letter-spacing="0.06em">req &rarr;</text>
+
+              <text x="260" y="22" text-anchor="middle"
+                    font-family="var(--font-mono)" font-size="8"
+                    fill="rgba(244,238,225,0.4)" letter-spacing="0.08em">
+                FIG. 1 &mdash; ROUTING PLANE POSITION IN RACK
+              </text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hollerith Punch-Card Decorative Motif Strip -->
+      <div class="container punch-card-strip-wrap">
+        <span class="punch-card-label">IBM 80-COL PATTERN &middot; HOLLERITH CODE REFERENCE</span>
+        <svg width="600" height="48" viewBox="0 0 720 58" xmlns="http://www.w3.org/2000/svg" aria-label="Punch-card encoding strip" role="img" style="max-width: 100%;">
+          <rect x="1" y="1" width="718" height="56" rx="2" fill="var(--c-surface)" stroke="var(--c-hairline)" stroke-width="1"/>
+          <polygon points="1,1 18,1 1,18" fill="var(--c-paper)"/>
+          <line x1="1" y1="18" x2="18" y2="1" stroke="var(--c-hairline)" stroke-width="1"/>
+          <!-- Sprockets -->
+          <g fill="var(--c-paper)" stroke="var(--c-hairline)" stroke-width="0.75">
+            <circle cx="28" cy="10" r="3"/>
+            <circle cx="68" cy="10" r="3"/>
+            <circle cx="108" cy="10" r="3"/>
+            <circle cx="148" cy="10" r="3"/>
+            <circle cx="188" cy="10" r="3"/>
+            <circle cx="228" cy="10" r="3"/>
+            <circle cx="268" cy="10" r="3"/>
+            <circle cx="308" cy="10" r="3"/>
+            <circle cx="348" cy="10" r="3"/>
+            <circle cx="388" cy="10" r="3"/>
+            <circle cx="428" cy="10" r="3"/>
+            <circle cx="468" cy="10" r="3"/>
+            <circle cx="508" cy="10" r="3"/>
+            <circle cx="548" cy="10" r="3"/>
+            <circle cx="588" cy="10" r="3"/>
+            <circle cx="628" cy="10" r="3"/>
+            <circle cx="668" cy="10" r="3"/>
+            <circle cx="700" cy="10" r="3"/>
+          </g>
+          <!-- Punched slots -->
+          <g fill="var(--c-paper)" stroke="var(--c-hairline)" stroke-width="0.5">
+            <rect x="44" y="24" width="6" height="12" rx="1"/>
+            <rect x="84" y="32" width="6" height="12" rx="1"/>
+            <rect x="124" y="24" width="6" height="12" rx="1"/>
+            <rect x="164" y="32" width="6" height="12" rx="1"/>
+            <rect x="244" y="24" width="6" height="12" rx="1"/>
+            <rect x="284" y="32" width="6" height="12" rx="1"/>
+            <rect x="364" y="24" width="6" height="12" rx="1"/>
+            <rect x="444" y="32" width="6" height="12" rx="1"/>
+            <rect x="524" y="24" width="6" height="12" rx="1"/>
+            <rect x="604" y="32" width="6" height="12" rx="1"/>
+            <rect x="684" y="24" width="6" height="12" rx="1"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — THE PROBLEM
+         ============================================================ -->
+    <section class="problem-section" id="problem" aria-labelledby="problem-title">
+      <div class="container">
+        <div class="problem-grid">
+          <!-- 5-Column Left Header & Friction Breakdown -->
+          <div class="problem-header-col">
+            <span class="label">02 &mdash; Problem</span>
+            <h2 class="section-h2" id="problem-title">
+              Boundary assumptions that were never written down.
+            </h2>
+            <p class="body-lead" style="color: var(--c-muted);">
+              When internal services scale past eight instances, integration logic degrades into ad-hoc glue code. Each team solves protocol mismatches in isolation.
+            </p>
+
+            <div class="problem-callout-box">
+              <div class="problem-callout-title">
+                <!-- Warning/Violation Icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3L2 21h20L12 3z" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="10" x2="12" y2="15" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="12" cy="18" r="0.75" fill="var(--c-ink)" stroke="var(--c-ink)" stroke-width="0.5"/>
+                </svg>
+                <span>COMMON BOUNDARY FAILURES</span>
+              </div>
+              <ul class="problem-items-list">
+                <li class="problem-item">
+                  <span class="problem-item-code">ERR_PAYLOAD_DRIFT</span>
+                  <span>Upstream caller expects REST JSON; downstream responds with Protobuf stream or unformatted 500 HTML.</span>
+                </li>
+                <li class="problem-item">
+                  <span class="problem-item-code">ERR_RETRY_STORM</span>
+                  <span>Uncoordinated exponential backoffs trigger downstream cascade timeouts across 20+ services.</span>
+                </li>
+                <li class="problem-item">
+                  <span class="problem-item-code">ERR_OPAQUE_FAULT</span>
+                  <span>Root causes require 40&ndash;80 minutes of manual log stitching across separate team silos.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 1-Column Center Hairline Divider -->
+          <div class="problem-divider-col">
+            <div class="vertical-rule"></div>
+          </div>
+
+          <!-- 6-Column Right Body & Analysis -->
+          <div class="problem-body-col">
+            <p class="body-lead">
+              Every internal service boundary is a handshake negotiated ad hoc: one team uses REST with custom error codes, another uses gRPC with Protobuf contracts, a third has a legacy HTTP/1.1 endpoint that will not be migrated.
+            </p>
+            <p class="body-lead">
+              When these services call each other, the integration logic lives in application code &mdash; duplicated across teams, inconsistently enforced, and opaque in failure.
+            </p>
+            <p class="body-lead">
+              The result is incidents that trace back not to bad code, but to boundary assumptions that were never written down.
+            </p>
+
+            <!-- Technical Registration Frame Specimen -->
+            <div style="margin-top: var(--sp-48); background: var(--c-surface); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); padding: var(--sp-24);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--c-muted);">BOUNDARY INVENTORY &middot; AUDIT SUMMARY</span>
+                <span class="status-chip" style="padding: 2px 8px; font-size: 11px;">
+                  <span class="status-dot warn"></span>
+                  <span>HIGH PROTOCOL VARIANCE</span>
+                </span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: var(--c-ink);">
+                <div>Target Environment: 8&ndash;80 microservice clusters</div>
+                <div>Unwritten Contracts: Avg 14 undocumented boundary endpoints</div>
+                <div>Mean Remediation Time: 52 minutes per boundary failure</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — THE SOLUTION
+         ============================================================ -->
+    <section class="solution-section" id="solution" aria-labelledby="solution-title">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="solution-header-grid">
+          <div class="solution-header-left">
+            <span class="label">03 &mdash; Solution</span>
+            <h2 class="section-h2" id="solution-title">
+              One routing layer. Consistent rules at every boundary.
+            </h2>
+          </div>
+          <div class="solution-header-right">
+            <p class="body-lead">
+              Japolic sits between services as a lightweight, stateless routing plane. It holds the protocol negotiation, policy enforcement, and failure handling that currently lives scattered across application codebases. Each rule is versioned in config, observable in structured logs, and deployable in under two minutes.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 Core Capabilities Cards -->
+        <div class="capabilities-grid">
+          <!-- Card 1 -->
+          <div class="capability-card">
+            <div>
+              <div class="capability-num">
+                <span>01</span>
+                <!-- Protocol icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="2" y="3" width="6" height="6" rx="1" stroke="var(--c-ink)" stroke-width="1.5"/>
+                  <rect x="16" y="3" width="6" height="6" rx="1" stroke="var(--c-ink)" stroke-width="1.5"/>
+                  <rect x="9" y="15" width="6" height="6" rx="1" stroke="var(--c-ink)" stroke-width="1.5"/>
+                  <line x1="5" y1="9" x2="5" y2="18" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="5" y1="18" x2="9" y2="18" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="19" y1="9" x2="19" y2="18" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="15" y1="18" x2="19" y2="18" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="capability-title">Protocol Arbitration</h3>
+              <p class="capability-desc">
+                Translates between conflicting internal protocols at the request boundary &mdash; HTTP/2, gRPC, WebSocket &mdash; without requiring contract changes from either service.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-24); font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">
+              SCOPE: HTTP/2 &middot; gRPC &middot; WEBSOCKET
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="capability-card">
+            <div>
+              <div class="capability-num">
+                <span>02</span>
+                <!-- Policy icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="4" y="2" width="16" height="20" rx="1" stroke="var(--c-ink)" stroke-width="1.5"/>
+                  <line x1="8" y1="7" x2="16" y2="7" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="8" y1="11" x2="16" y2="11" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="8" y1="15" x2="13" y2="15" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M14.5 17l1.5 2L20 15" stroke="var(--c-amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="capability-title">Policy-Gated Traffic</h3>
+              <p class="capability-desc">
+                Evaluates each request against a versioned ruleset before it reaches the destination. Rules are written in a declarative config file, diffed in CI, and deployed atomically.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-24); font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">
+              CI/CD: ATOMIC DEPLOY &middot; VERSIONED DIFFS
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="capability-card">
+            <div>
+              <div class="capability-num">
+                <span>03</span>
+                <!-- Route / Failure icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 6h8l2 4-2 4H3" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M13 10h5a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-5" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="5" cy="6" r="1.5" stroke="var(--c-ink)" stroke-width="1.5" fill="none"/>
+                  <circle cx="19" cy="12" r="1.5" stroke="var(--c-ink)" stroke-width="1.5" fill="none"/>
+                  <circle cx="5" cy="18" r="1.5" stroke="var(--c-ink)" stroke-width="1.5" fill="none"/>
+                  <path d="M3 18h8" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="capability-title">Structured Failure Routing</h3>
+              <p class="capability-desc">
+                When a downstream service returns a defined error class, Japolic routes to a fallback path or returns a structured error payload instead of surfacing a raw upstream fault.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-24); font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">
+              PAYLOAD: JSON/GRPC STRUCTURED ERROR ENVELOPE
+            </div>
+          </div>
+        </div>
+
+        <!-- "What Japolic is not" Contrast Panel -->
+        <div class="what-it-is-not-panel">
+          <div class="what-it-is-not-grid">
+            <div>
+              <span class="what-it-is-not-lead">Architectural Boundaries</span>
+              <h3 style="font-family: var(--font-display); font-size: 22px; color: var(--c-ink); margin-top: 8px;">
+                Clear separation of concerns.
+              </h3>
+            </div>
+            <div class="what-it-is-not-items">
+              <div class="not-item">
+                <span class="not-item-tag">NOT A</span>
+                <span class="not-item-text">Service Mesh</span>
+                <p style="font-size: 12px; color: var(--c-muted); margin-top: 4px;">No sidecar daemon bloat or complex mTLS proxies.</p>
+              </div>
+              <div class="not-item">
+                <span class="not-item-tag">NOT A</span>
+                <span class="not-item-text">Full API Gateway</span>
+                <p style="font-size: 12px; color: var(--c-muted); margin-top: 4px;">Dedicated strictly to internal service-to-service calls.</p>
+              </div>
+              <div class="not-item">
+                <span class="not-item-tag">NOT A</span>
+                <span class="not-item-text">Load Balancer</span>
+                <p style="font-size: 12px; color: var(--c-muted); margin-top: 4px;">Works alongside your existing L4/L7 infrastructure.</p>
+              </div>
+            </div>
+          </div>
+          <div class="one-job-statement">
+            <strong>Japolic does one job:</strong> make the contract between two internal services explicit, enforced, and auditable.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         04 — FEATURE DEEP-DIVE: POLICY PLANE
+         ============================================================ -->
+    <section class="feature-section" id="feature" aria-labelledby="feature-title">
+      <div class="container">
+        <div class="feature-grid">
+          <!-- 8-Column Left Main Column -->
+          <div class="feature-main-col">
+            <span class="label">04 &mdash; Feature: Policy Plane</span>
+            <h2 class="feature-title" id="feature-title">
+              Rules live in config. Violations surface in logs.
+            </h2>
+            <p class="feature-lead">
+              The Policy Plane is Japolic's enforcement engine. You define traffic rules in a <code style="font-family: var(--font-mono); font-size: 13px; background: var(--c-surface); padding: 2px 6px; border: 1px solid var(--c-hairline); border-radius: var(--r-sm);">japolic.rules</code> YAML file alongside your service manifests. Rules specify: which services may call which endpoints, under what conditions, with what required headers, and what constitutes a valid response envelope.
+            </p>
+
+            <!-- Real Syntax-Styled Code Window -->
+            <div class="code-window">
+              <div class="code-header">
+                <span class="code-filename">japolic.rules (declarative manifest)</span>
+                <span class="code-badge">SYNTAX: YAML &middot; SPEC v1</span>
+              </div>
+              <pre class="code-block"><code><span class="c-comment"># japolic.rules &mdash; internal contract specification</span>
+<span class="c-key">route</span>:
+  <span class="c-key">source</span>: <span class="c-val">payments-service</span>
+  <span class="c-key">destination</span>: <span class="c-val">ledger-service</span>
+  <span class="c-key">method</span>: <span class="c-val">POST</span>
+  <span class="c-key">path</span>: <span class="c-val">/entries</span>
+  <span class="c-key">require-headers</span>:
+    - <span class="c-val">X-Idempotency-Key</span>
+    - <span class="c-val">X-Trace-ID</span>
+  <span class="c-key">response-schema</span>: <span class="c-val">./schemas/ledger-entry-response.json</span>
+  <span class="c-key">on-violation</span>: <span class="c-val">return-structured-error</span>
+  <span class="c-key">error-code</span>: <span class="c-num">PROTO_VIOLATION_4031</span></code></pre>
+            </div>
+
+            <!-- Bullet Points -->
+            <ul class="feature-points">
+              <li class="feature-point-item">
+                <span><strong>Rules are diffs.</strong> Every policy change is a PR, not a Slack message or undocumented manual tweak.</span>
+              </li>
+              <li class="feature-point-item">
+                <span><strong>Violations are not crashes.</strong> They return a documented error code at the boundary before bad data reaches downstream services.</span>
+              </li>
+              <li class="feature-point-item">
+                <span><strong>No application code change required.</strong> Drop in the Japolic sidecar, apply config. The services are unaware of the enforcement layer.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 4-Column Right Metric & Stat Panel -->
+          <div class="feature-side-col">
+            <div class="stat-panel">
+              <span class="label" style="margin-bottom: 8px;">BENCHMARK OVERHEAD</span>
+              <div class="stat-value">&lt; 1.2ms</div>
+              <span class="stat-unit">p99 REQUEST LATENCY OVERHEAD</span>
+              <p class="stat-context">
+                Measured at 10,000 req/sec in our internal benchmarks on a 2-core container runtime.
+              </p>
+
+              <div class="stat-divider"></div>
+
+              <span class="label" style="margin-bottom: 8px;">ENFORCEMENT INTEGRITY</span>
+              <div style="font-family: var(--font-mono); font-size: 24px; font-weight: 500; color: var(--c-ink); margin-bottom: 4px;">
+                0.00%
+              </div>
+              <span class="stat-unit">CONTRACT DRIFT SURFACED DOWNSTREAM</span>
+              <p class="stat-context">
+                Violations are trapped at the perimeter before payload execution.
+              </p>
+
+              <div class="stat-divider"></div>
+
+              <div class="status-chip" style="width: 100%; justify-content: center;">
+                <span class="status-dot ok"></span>
+                <span>STATELESS &middot; ZERO LOCKING</span>
+              </div>
+            </div>
+
+            <!-- Diagnostic Registration Widget -->
+            <div style="background: var(--c-surface); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); padding: var(--sp-20);">
+              <div style="font-family: var(--font-mono); font-size: 11px; color: var(--c-muted); margin-bottom: 8px;">
+                OBSERVABILITY EXPORT
+              </div>
+              <p style="font-size: 13px; line-height: 1.5; color: var(--c-ink);">
+                Native OpenTelemetry traces with rule-id tags injected on every request boundary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         05 — USE CASES
+         ============================================================ -->
+    <section class="use-cases-section" id="use-cases" aria-labelledby="use-cases-title">
+      <div class="container">
+        <span class="label">05 &mdash; Use Cases</span>
+        <h2 class="section-h2" id="use-cases-title">
+          Proven under operational load.
+        </h2>
+        <p class="body-lead" style="max-width: var(--t-measure-body);">
+          Real-world infrastructure situations where ambiguous contracts caused measurable incidents &mdash; and how explicit protocol enforcement resolved them.
+        </p>
+
+        <!-- Use Case 1: Fintech -->
+        <div class="use-case-row">
+          <div class="use-case-left">
+            <span class="use-case-category">CASE 01 &middot; FINTECH PLATFORM INFRASTRUCTURE</span>
+            <h3 class="use-case-title">Platform Team at a Fintech</h3>
+            <p class="use-case-situation">
+              A 40-engineer fintech runs 22 internal services. Three teams have independently built retry logic into their HTTP clients. After a downstream timeout cascade, the post-mortem traces the failure to inconsistent retry intervals and missing idempotency headers.
+            </p>
+            <div class="use-case-japolic">
+              <div class="use-case-japolic-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
+                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>HOW JAPOLIC WAS DEPLOYED</span>
+              </div>
+              <p class="use-case-japolic-text">
+                Platform team defines a single <code style="font-family: var(--font-mono); font-size: 12px; background: var(--c-paper); padding: 1px 4px; border-radius: 2px;">retry-policy</code> rule applied globally to all POST requests. Header requirements are enforced at the boundary. Teams remove their own retry logic and consume the Japolic error payload instead.
+              </p>
+            </div>
+          </div>
+          <div class="use-case-right">
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-number accent">0</div>
+                <div class="metric-label">TIMEOUT CASCADES IN 90 DAYS POST-DEPLOY</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">0/mo</div>
+                <div class="metric-label">DUPLICATE TRANSACTIONS (DOWN FROM 4/MO)</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">~1,400</div>
+                <div class="metric-label">LINES OF CUSTOM RETRY CODE REMOVED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Use Case 2: Protocol Migration -->
+        <div class="use-case-row">
+          <div class="use-case-left">
+            <span class="use-case-category">CASE 02 &middot; PROTOCOL MIGRATION</span>
+            <h3 class="use-case-title">Protocol Migration: REST to gRPC</h3>
+            <p class="use-case-situation">
+              A backend team is migrating 6 internal services from REST to gRPC over 3 months. During the migration, callers and providers exist on different protocol versions simultaneously. Testing the in-between state requires standing up mock services.
+            </p>
+            <div class="use-case-japolic">
+              <div class="use-case-japolic-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
+                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>HOW JAPOLIC WAS DEPLOYED</span>
+              </div>
+              <p class="use-case-japolic-text">
+                Japolic's protocol arbitration layer translates gRPC calls to REST for legacy endpoints during the migration window. The calling service is updated once and speaks only gRPC. Japolic handles downward translation until each provider completes migration.
+              </p>
+            </div>
+          </div>
+          <div class="use-case-right">
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-number accent">11 wks</div>
+                <div class="metric-label">MIGRATION TIME (DOWN FROM 6 MO ESTIMATED)</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">0</div>
+                <div class="metric-label">BREAKING CHANGES SURFACED UPSTREAM</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">3</div>
+                <div class="metric-label">MOCK INTERNAL SERVICES DECOMMISSIONED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Use Case 3: On-Call Debugging -->
+        <div class="use-case-row">
+          <div class="use-case-left">
+            <span class="use-case-category">CASE 03 &middot; INCIDENT RESPONSE &amp; ON-CALL</span>
+            <h3 class="use-case-title">Debugging Boundary Failures</h3>
+            <p class="use-case-situation">
+              An on-call engineer receives a P2 alert. The error surfaces in service A but originates at the boundary between service B and service C. Standard logs show a 500 with no structured payload. Tracing the chain manually takes 40&ndash;80 minutes per incident.
+            </p>
+            <div class="use-case-japolic">
+              <div class="use-case-japolic-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
+                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>HOW JAPOLIC WAS DEPLOYED</span>
+              </div>
+              <p class="use-case-japolic-text">
+                Every boundary violation produces a structured log entry: source service, destination service, rule violated, request hash, timestamp, and response received. The engineer queries the Japolic log stream with two filters and identifies root cause in under 5 minutes.
+              </p>
+            </div>
+          </div>
+          <div class="use-case-right">
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-number accent">4.5m</div>
+                <div class="metric-label">MEAN TIME TO ROOT CAUSE (WAS 52 MIN)</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">-60%</div>
+                <div class="metric-label">INCIDENTS REQUIRING CROSS-TEAM ESCALATION</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number">-50%</div>
+                <div class="metric-label">ESCALATIONS TO SENIOR STAFF ENGINEERS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CTA ACCESS SECTION
+         ============================================================ -->
+    <section class="section" id="request-access" style="background: var(--c-surface); border-bottom: 1px solid var(--c-hairline);">
+      <div class="container" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gutter); align-items: center;">
+        <div style="grid-column: span 7;">
+          <span class="label">06 &mdash; Access</span>
+          <h2 class="section-h2" style="margin-bottom: var(--sp-16);">
+            Enforce boundary contracts across your services.
+          </h2>
+          <p class="body-lead" style="color: var(--c-muted); margin-bottom: 0;">
+            Currently onboarding engineering teams running between 8 and 80 internal services. Request your evaluation license and integration spec.
+          </p>
+        </div>
+        <div style="grid-column: span 5; display: flex; flex-direction: column; gap: var(--sp-16);">
+          <form style="display: flex; flex-direction: column; gap: var(--sp-12);" onsubmit="event.preventDefault(); alert('Request submitted. We will review your infrastructure parameters.');">
+            <label for="work-email" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--c-muted);">WORK EMAIL (ENGINEERING DOMAIN)</label>
+            <div style="display: flex; gap: var(--sp-8);">
+              <input type="email" id="work-email" required placeholder="lead@company.internal" style="flex: 1; padding: 12px 16px; background: var(--c-paper); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 13px; color: var(--c-ink);">
+              <button type="submit" class="btn-primary" style="padding: 12px 20px;">Request Access &rarr;</button>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">
+              Deterministic onboarding &middot; Zero telemetry exfiltration
+            </span>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       06 — FOOTER
+       ============================================================ -->
+  <footer class="site-footer" id="footer" aria-label="Site Footer">
+    <div class="container">
+      <div class="footer-top">
+        <!-- Brand & Tagline -->
+        <div class="footer-brand-col">
+          <span class="footer-wordmark">Japolic</span>
+          <p class="footer-tagline">
+            Lightweight, stateless routing layer enforcing protocol compliance between internal services.
+          </p>
+          <div class="status-chip" style="border-color: rgba(216,207,188,0.3); color: var(--c-footer-text);">
+            <span class="status-dot ok"></span>
+            <span>SYSTEM HEALTH: 100% OPERATIONAL</span>
+          </div>
+        </div>
+
+        <!-- Col 1: Product -->
+        <div>
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="#solution" class="footer-link">Overview</a></li>
+            <li><a href="#solution" class="footer-link">Protocol Arbitration</a></li>
+            <li><a href="#feature" class="footer-link">Policy Plane</a></li>
+            <li><a href="#solution" class="footer-link">Failure Routing</a></li>
+            <li><a href="#changelog" class="footer-link">Changelog</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2: Developers -->
+        <div>
+          <div class="footer-col-title">Developers</div>
+          <ul class="footer-links-list">
+            <li><a href="#docs" class="footer-link">Documentation</a></li>
+            <li><a href="#protocol" class="footer-link">Protocol Reference</a></li>
+            <li><a href="#api" class="footer-link">API Reference</a></li>
+            <li><a href="#sdks" class="footer-link">SDKs</a></li>
+            <li><a href="#open-source" class="footer-link">Open Source</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Company -->
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a href="#about" class="footer-link">About</a></li>
+            <li><a href="#blog" class="footer-link">Blog</a></li>
+            <li><a href="#security" class="footer-link">Security</a></li>
+            <li><a href="https://status.japolic.io" class="footer-link external" target="_blank" rel="noopener">Status &nearr;</a></li>
+            <li><a href="#contact" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Legal -->
+        <div>
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#terms" class="footer-link">Terms of Service</a></li>
+            <li><a href="#dpa" class="footer-link">Data Processing Agreement</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 Japolic, Inc. &middot; All rights reserved. Built to engineering specification.
+        </div>
+        <div class="footer-social-links">
+          <a href="https://github.com" class="footer-social-link" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://twitter.com" class="footer-social-link" target="_blank" rel="noopener">X / Twitter</a>
+          <a href="https://linkedin.com" class="footer-social-link" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript: Scroll state & Mobile toggle -->
+  <script>
+    (function() {
+      // 1. Header scroll border/background toggle
+      const header = document.getElementById('site-header');
+      function onScroll() {
+        if (window.scrollY > 20) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // 2. Mobile navigation toggle
+      const toggle = document.getElementById('nav-toggle');
+      const drawer = document.getElementById('mobile-nav');
+      if (toggle && drawer) {
+        toggle.addEventListener('click', function() {
+          const isOpen = drawer.classList.contains('open');
+          if (isOpen) {
+            drawer.classList.remove('open');
+            drawer.setAttribute('aria-hidden', 'true');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = 'Menu';
+          } else {
+            drawer.classList.add('open');
+            drawer.setAttribute('aria-hidden', 'false');
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.textContent = 'Close';
+          }
+        });
+
+        // Close drawer when a link is clicked
+        const mobileLinks = drawer.querySelectorAll('.mobile-link');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            drawer.classList.remove('open');
+            drawer.setAttribute('aria-hidden', 'true');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = 'Menu';
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
