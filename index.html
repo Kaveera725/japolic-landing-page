@@ -91,24 +91,37 @@
       <div class="container hero-content">
         <!-- 7-Column Left Content -->
         <div class="hero-text-col">
-          <span class="label">01 &mdash; Hero</span>
+          <div class="hero-eyebrow-row">
+            <span class="label" style="margin-bottom: 0;">01 &mdash; PROTOCOL ROUTING LAYER</span>
+            <span class="hero-audience-tag">FOR PLATFORM TEAMS RUNNING 8&ndash;80 SERVICES</span>
+          </div>
+
           <h1 class="hero-h1" id="hero-title">
             Services talk. Nobody agrees on the <em>rules</em>.
           </h1>
+
           <p class="hero-sub">
-            Every internal service boundary is a handshake negotiated ad hoc. When services call each other, integration logic lives in application code &mdash; duplicated across teams, inconsistently enforced, and opaque in failure. Japolic makes every contract explicit.
+            Japolic is a lightweight routing layer that enforces protocol compliance between internal services. It translates conflicting formats (HTTP/2, gRPC, WebSocket), evaluates versioned policies before destination delivery, and routes structured failures &mdash; eliminating contract drift without application code changes.
           </p>
+
           <div class="hero-cta-group">
-            <a href="#request-access" class="btn-primary">Request Access &rarr;</a>
-            <a href="#solution" class="text-arrow-link">
-              Read the docs <span class="arrow">&rarr;</span>
-            </a>
+            <a href="#request-access" class="btn btn-primary" style="padding: 14px 28px; font-size: 15px;">Start building &rarr;</a>
+            <a href="#solution" class="btn btn-secondary" style="padding: 13px 26px; font-size: 15px;">Read protocol spec &rarr;</a>
           </div>
 
-          <div style="margin-top: var(--sp-32);">
-            <div class="status-chip">
-              <span class="status-dot ok"></span>
-              <span>PROTOCOL RUNTIME ACTIVE &middot; DETERMINISTIC ENFORCEMENT</span>
+          <!-- Trust Line -->
+          <div class="hero-trust-bar">
+            <div class="trust-item">
+              <span class="trust-check">&check;</span>
+              <span>40M+ daily boundary calls</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-check">&check;</span>
+              <span>&lt; 1.2ms p99 latency overhead</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-check">&check;</span>
+              <span>Zero telemetry exfiltration</span>
             </div>
           </div>
         </div>
@@ -231,6 +244,26 @@
                 FIG. 1 &mdash; ROUTING PLANE POSITION IN RACK
               </text>
             </svg>
+
+            <!-- Live Boundary Arbitration Telemetry Box -->
+            <div class="hero-telemetry-card" role="region" aria-label="Live protocol boundary telemetry readout">
+              <div class="hero-telemetry-header">
+                <span>LIVE PROTOCOL ARBITRATION TELEMETRY</span>
+                <span style="color: #7AA288;">&bull; DETERMINISTIC PASS</span>
+              </div>
+              <div class="hero-telemetry-row">
+                <span>INGRESS: payments-service</span>
+                <span style="color: var(--c-muted);">POST /entries &middot; HTTP/2 JSON</span>
+              </div>
+              <div class="hero-telemetry-row" style="margin-top: 4px;">
+                <span style="color: var(--c-amber);">&#8627; JAPOLIC ARBITRATION</span>
+                <span style="color: #7AA288;">RULE_4031: PASS (&lt; 0.84ms)</span>
+              </div>
+              <div class="hero-telemetry-row" style="margin-top: 4px;">
+                <span>EGRESS: ledger-service</span>
+                <span style="color: var(--c-muted);">grpc://ledger:50051 &middot; Protobuf</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
