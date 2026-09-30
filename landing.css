@@ -911,8 +911,186 @@
 }
 
 /* ============================================================
+   SECTION 04: FEATURE DIAGRAM — ANNOTATED POLICY PLANE
+   ============================================================ */
+
+/* Section header: 2-col asymmetric layout */
+.feature-diagram-header {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: var(--grid-gutter);
+  align-items: end;
+  margin-bottom: var(--sp-48);
+}
+
+.feature-diagram-sub {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.60;
+  color: var(--c-muted);
+  padding-bottom: 4px; /* align baseline with h2 */
+}
+
+/* Outer frame for SVG diagram */
+.feature-diagram-frame {
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  padding: var(--sp-32) var(--sp-32) var(--sp-24);
+  margin-bottom: var(--sp-48);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Engineering corner registration marks */
+.feat-reg {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--c-hairline);
+  border-style: solid;
+  pointer-events: none;
+}
+.feat-reg.tl { top: 8px; left: 8px;   border-width: 1px 0 0 1px; }
+.feat-reg.tr { top: 8px; right: 8px;  border-width: 1px 1px 0 0; }
+.feat-reg.bl { bottom: 8px; left: 8px;  border-width: 0 0 1px 1px; }
+.feat-reg.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+/* Numbered callout legend */
+.feature-callout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gutter);
+  margin-bottom: var(--sp-48);
+  border-top: 1px solid var(--c-ink);
+  padding-top: var(--sp-24);
+}
+
+.callout-item {
+  display: flex;
+  gap: var(--sp-16);
+  align-items: flex-start;
+  padding: 8px;
+  margin: -8px;
+  border-radius: var(--r-sm);
+  transition: background-color var(--tr-fast);
+}
+
+.callout-item:hover {
+  background: var(--c-surface);
+}
+
+.callout-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.callout-amber {
+  background: var(--c-amber);
+  color: var(--c-ink);
+}
+
+.callout-ink {
+  background: var(--c-ink);
+  color: var(--c-paper);
+}
+
+.callout-error {
+  background: #C4441A;
+  color: var(--c-paper);
+}
+
+.callout-title {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-ink);
+  margin-bottom: var(--sp-4);
+}
+
+.callout-desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--c-muted);
+}
+
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--c-paper);
+  border: 1px solid var(--c-hairline);
+  padding: 1px 5px;
+  border-radius: var(--r-sm);
+}
+
+/* 3 spec stat cards strip */
+.feature-spec-strip {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  overflow: hidden;
+}
+
+.spec-stat-card {
+  padding: var(--sp-32);
+  transition: background-color var(--tr-fast);
+}
+
+.spec-stat-card:hover {
+  background: var(--c-paper);
+}
+
+.spec-stat-divider {
+  width: 1px;
+  background: var(--c-hairline);
+  flex-shrink: 0;
+}
+
+.spec-stat-num {
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--c-amber);
+  line-height: 1;
+  margin-bottom: var(--sp-8);
+}
+
+.spec-stat-unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-12);
+  display: block;
+}
+
+.spec-stat-ctx {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--c-muted);
+}
+
+/* ============================================================
    SECTION 05: USE CASES
    ============================================================ */
+
 .use-cases-section {
   padding-block: var(--section-pad-y);
   border-bottom: 1px solid var(--c-hairline);
@@ -1359,17 +1537,48 @@
     gap: var(--sp-16);
   }
 
-  /* --- FEATURE/POLICY PLANE --- */
-  .feature-grid {
+  /* --- FEATURE/POLICY PLANE (ANNOTATED DIAGRAM) --- */
+  .feature-diagram-header {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-32);
+    gap: var(--sp-16);
+    margin-bottom: var(--sp-32);
   }
 
-  .feature-main-col,
-  .feature-side-col {
-    grid-column: span 12;
+  .feature-diagram-frame {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--sp-24) var(--sp-16) var(--sp-16);
+    margin-bottom: var(--sp-32);
+  }
+
+  .feature-diagram-frame svg {
+    min-width: 680px;
+    height: auto;
+  }
+
+  .feature-callout-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-24);
+    margin-bottom: var(--sp-32);
+  }
+
+  .feature-spec-strip {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .spec-stat-divider {
     width: 100%;
+    height: 1px;
+  }
+
+  .spec-stat-card {
+    padding: var(--sp-24);
+  }
+
+  .spec-stat-num {
+    font-size: 32px;
   }
 
   /* --- USE CASES --- */
@@ -1405,5 +1614,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--sp-16);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 809px) {
+  .feature-callout-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

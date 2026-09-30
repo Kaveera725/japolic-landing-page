@@ -22,6 +22,23 @@ A Figma-ready, zero-framework web design system and landing page for **Japolic**
 
 ---
 
+## How to Run Locally
+
+Start a local static HTTP server:
+
+```bash
+# Using Python (standard library)
+python -m http.server 3000
+```
+
+Then visit:
+- **Landing Page**: [http://localhost:3000/index.html](http://localhost:3000/index.html)
+- **Design Direction Board**: [http://localhost:3000/direction.html](http://localhost:3000/direction.html)
+- **Component Matrix**: [http://localhost:3000/components.html](http://localhost:3000/components.html)
+- **SVG Asset Library**: [http://localhost:3000/assets.html](http://localhost:3000/assets.html)
+
+---
+
 ## Design Thesis & Heritage
 
 Japolic draws aesthetic and conceptual inspiration from early computing history and classic technical publishing:
