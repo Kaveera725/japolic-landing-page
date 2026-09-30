@@ -34,24 +34,26 @@
 }
 
 /* ============================================================
-   HEADER & NAVIGATION
+   HEADER & NAVIGATION (Sticky, Hairline, Clear Hierarchy)
    ============================================================ */
 .site-header {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
+  width: 100%;
   height: var(--nav-height);
-  background: var(--nav-bg);
-  z-index: 100;
-  transition: var(--nav-transition);
+  background-color: var(--c-paper);
+  border-bottom: 1px solid var(--c-hairline);
+  z-index: 1000;
   display: flex;
   align-items: center;
+  transition: background-color 200ms ease, border-color 200ms ease;
 }
 
 .site-header.scrolled {
-  background: var(--nav-bg-scrolled);
-  border-bottom: var(--nav-border-scrolled);
+  background-color: rgba(244, 238, 225, 0.98);
+  border-bottom: 1px solid var(--c-hairline);
 }
 
 .nav-container {
@@ -63,55 +65,125 @@
   gap: var(--sp-24);
 }
 
+/* Designed Japolic Wordmark */
 .brand-group {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--sp-12);
+  text-decoration: none;
+  color: var(--c-ink);
+}
+
+.brand-logomark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .brand-wordmark {
-  font-family: var(--nav-wordmark-family);
-  font-size: var(--nav-wordmark-size);
-  font-weight: var(--nav-wordmark-weight);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
   color: var(--c-ink);
-  letter-spacing: -0.01em;
-  text-decoration: none;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
 .brand-version {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 500;
   color: var(--c-muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   border: 1px solid var(--c-hairline);
   padding: 2px 6px;
   border-radius: var(--r-sm);
+  background-color: var(--c-surface);
 }
 
+/* Center Navigation Links */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--sp-32);
+  gap: var(--sp-24);
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-link {
   font-family: var(--nav-link-family);
   font-size: var(--nav-link-size);
   font-weight: var(--nav-link-weight);
-  color: var(--nav-link-color);
+  color: var(--c-ink);
   transition: color var(--transition-hover);
   text-decoration: none;
+  padding: 6px 4px;
 }
 
 .nav-link:hover {
-  color: var(--nav-link-hover);
+  color: var(--c-muted);
 }
 
+/* Right Nav Actions (Hierarchy: Sign in -> Start building) */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: var(--sp-16);
+}
+
+.nav-signin-link {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-ink);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  transition: color var(--transition-hover);
+}
+
+.nav-signin-link:hover {
+  text-decoration: underline;
+  color: var(--c-ink);
+}
+
+.nav-signin-link:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.nav-cta-btn {
+  background-color: var(--c-amber);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--r-sm);
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-hover);
+}
+
+.nav-cta-btn:hover {
+  background-color: var(--c-amber-hover);
+  color: var(--c-ink);
+}
+
+.nav-cta-btn:active {
+  background-color: var(--c-amber-active);
+}
+
+.nav-cta-btn:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Nav toggle button for mobile */
@@ -964,6 +1036,8 @@
    ============================================================ */
 @media (max-width: 809px) {
   .nav-links,
+  .nav-actions .nav-signin-link,
+  .nav-actions .nav-cta-btn,
   .nav-actions .btn-ghost {
     display: none;
   }

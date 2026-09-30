@@ -20,24 +20,36 @@
        ============================================================ -->
   <header class="site-header" id="site-header">
     <div class="nav-container">
-      <div class="brand-group">
-        <a href="#hero" class="brand-wordmark" aria-label="Japolic Homepage">Japolic</a>
+      <!-- Designed Japolic Wordmark -->
+      <a href="#hero" class="brand-group" aria-label="Japolic Homepage">
+        <span class="brand-logomark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="2" width="20" height="20" rx="2" stroke="var(--c-ink)" stroke-width="1.5" />
+            <path d="M2 12h8l4-4h8" stroke="var(--c-ink)" stroke-width="1.25" stroke-linecap="round" />
+            <path d="M10 12l4 4h8" stroke="var(--c-ink)" stroke-width="1.25" stroke-linecap="round" />
+            <circle cx="10" cy="12" r="2.5" fill="var(--c-amber)" />
+          </svg>
+        </span>
+        <span class="brand-wordmark">Japolic</span>
         <span class="brand-version">v1.0</span>
-      </div>
+      </a>
 
+      <!-- Center Navigation Links -->
       <nav aria-label="Primary Navigation">
         <ul class="nav-links">
           <li><a href="#problem" class="nav-link">Problem</a></li>
           <li><a href="#solution" class="nav-link">Architecture</a></li>
           <li><a href="#feature" class="nav-link">Policy Plane</a></li>
           <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
-          <li><a href="assets.html" class="nav-link">Asset Library</a></li>
           <li><a href="direction.html" class="nav-link">Direction Board</a></li>
+          <li><a href="components.html" class="nav-link">Components</a></li>
         </ul>
       </nav>
 
+      <!-- Clear Hierarchy: Sign in text link -> Primary CTA Start building -->
       <div class="nav-actions">
-        <a href="#request-access" class="btn-ghost">Request Access &rarr;</a>
+        <a href="#signin" class="nav-signin-link">Sign in</a>
+        <a href="#request-access" class="nav-cta-btn">Start building &rarr;</a>
         <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
           Menu
         </button>
@@ -51,9 +63,11 @@
     <a href="#solution" class="nav-link mobile-link">Architecture</a>
     <a href="#feature" class="nav-link mobile-link">Policy Plane</a>
     <a href="#use-cases" class="nav-link mobile-link">Use Cases</a>
-    <a href="assets.html" class="nav-link mobile-link">Asset Library</a>
     <a href="direction.html" class="nav-link mobile-link">Direction Board</a>
-    <a href="#request-access" class="btn-primary" style="margin-top: 12px; width: 100%; text-align: center;">Request Access &rarr;</a>
+    <a href="components.html" class="nav-link mobile-link">Components</a>
+    <hr class="hairline" style="margin-block: 8px;">
+    <a href="#signin" class="nav-link mobile-link" style="font-weight: 500;">Sign in</a>
+    <a href="#request-access" class="btn-primary" style="margin-top: 8px; width: 100%; text-align: center;">Start building &rarr;</a>
   </div>
 
   <main id="main-content">
