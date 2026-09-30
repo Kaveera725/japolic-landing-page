@@ -3,644 +3,920 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Japolic — Web Direction Board &amp; Design System Spec</title>
-  <meta name="description" content="Visual web-direction board, design tokens, typography scale, color contrast audit, and component specimens for Japolic.">
+  <title>Japolic — Studio Web-Direction Board (1440×1800)</title>
+  <meta name="description" content="1440×1800 studio presentation board for Japolic web design system: typography specimens, color swatches, 12-column grid overlay, graphic language, UI primitives, and 3 core rationale lines.">
   <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
   <style>
-    body {
-      background-color: var(--c-paper);
+    /* Global canvas framing */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #E2DBD0; /* Neutral drafting desk surface */
       color: var(--c-ink);
       font-family: var(--font-body);
-      font-size: var(--t-body-size);
-      line-height: var(--t-body-lh);
-      padding: 60px 0 120px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .board-header {
-      width: min(1200px, 100% - 240px);
-      margin-inline: auto;
-      padding-bottom: 48px;
-      border-bottom: 1px solid var(--c-hairline);
-      margin-bottom: 64px;
+    .desk-viewport {
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 1480px;
     }
 
-    .board-header .eyebrow {
+    /* Fixed 1440×1800 Studio Presentation Board Canvas */
+    .studio-board {
+      width: 1440px;
+      height: 1800px;
+      background-color: var(--c-paper);
+      position: relative;
+      box-sizing: border-box;
+      padding: 48px;
+      border: 1px solid var(--c-hairline);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Corner registration marks on the outer board perimeter */
+    .board-reg {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-color: var(--c-ink);
+      border-style: solid;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .board-reg.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+    .board-reg.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+    .board-reg.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+    .board-reg.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+    /* Interactive 12-Column Grid Overlay */
+    .grid-overlay-layer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 120px;
+      right: 120px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+    .grid-overlay-layer.is-active {
+      opacity: 1;
+    }
+    .grid-col-stripe {
+      background-color: rgba(217, 130, 43, 0.08);
+      border-inline: 1px dashed rgba(217, 130, 43, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 16px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--c-amber);
+      font-weight: 500;
+    }
+
+    /* Board Header */
+    .board-top-strip {
+      display: grid;
+      grid-template-columns: 320px 1fr 280px;
+      gap: 32px;
+      align-items: flex-start;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--c-ink);
+    }
+
+    .brand-meta h1 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin: 0 0 6px 0;
+    }
+    .brand-meta .subline {
       font-family: var(--font-mono);
       font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--c-muted);
+      text-transform: uppercase;
+    }
+
+    /* 3 Core Rationale Lines */
+    .rationale-panel {
+      border-left: 2px solid var(--c-amber);
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .rationale-panel-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
       font-weight: 500;
       letter-spacing: 0.10em;
-      color: var(--c-muted);
-      margin-bottom: 16px;
+      color: var(--c-amber);
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
-
-    .board-header h1 {
-      font-family: var(--font-display);
-      font-size: 48px;
-      font-weight: 300;
-      line-height: 1.0;
-      letter-spacing: -0.02em;
+    .rationale-line {
+      font-size: 13px;
+      line-height: 1.45;
       color: var(--c-ink);
-      margin-bottom: 16px;
     }
-
-    .board-header p {
-      font-size: 17px;
-      color: var(--c-muted);
-      max-width: 680px;
-      line-height: 1.6;
-    }
-
-    .nav-bar-specimen {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-top: 24px;
-    }
-
-    .board-section {
-      width: min(1200px, 100% - 240px);
-      margin-inline: auto;
-      margin-bottom: 96px;
-    }
-
-    .section-title-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 24px;
-      margin-bottom: 32px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--c-hairline);
-    }
-
-    .section-title-wrap h2 {
-      font-family: var(--font-body);
-      font-size: 24px;
+    .rationale-line strong {
       font-weight: 600;
       color: var(--c-ink);
     }
 
-    .section-title-wrap .idx {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--c-muted);
-      letter-spacing: 0.10em;
+    .board-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
     }
-
-    /* Grid cards */
-    .board-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .board-grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .board-grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-
-    .spec-card {
-      background: var(--c-surface);
-      border: 1px solid var(--c-hairline);
-      border-radius: var(--r-sm);
-      padding: 32px;
-    }
-
-    .spec-card.white {
+    .grid-toggle-btn {
       background: var(--c-paper);
+      border: 1px solid var(--c-ink);
+      border-radius: var(--r-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--c-ink);
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color var(--transition-hover), color var(--transition-hover);
     }
-
-    .spec-card.dark {
+    .grid-toggle-btn:hover {
       background: var(--c-ink);
       color: var(--c-paper);
     }
-
-    .spec-card-title {
+    .grid-toggle-btn.is-active {
+      background: var(--c-amber);
+      border-color: var(--c-amber);
+      color: var(--c-ink);
+    }
+    .board-spec-tag {
       font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
+      font-size: 10px;
+      letter-spacing: 0.06em;
       color: var(--c-muted);
-      margin-bottom: 16px;
-      display: block;
     }
 
-    .spec-card.dark .spec-card-title {
-      color: rgba(244, 238, 225, 0.5);
+    /* Board Rows */
+    .board-row {
+      display: grid;
+      gap: 32px;
+      align-items: stretch;
     }
 
-    /* Color Swatches */
-    .swatch {
-      height: 100px;
-      border-radius: var(--r-sm);
+    .row-1 {
+      grid-template-columns: 820px 492px;
+      height: 480px;
+    }
+
+    .row-2 {
+      grid-template-columns: 560px 752px;
+      height: 460px;
+    }
+
+    .row-3 {
+      grid-template-columns: 740px 572px;
+      height: 480px;
+    }
+
+    /* Card Panels inside Board */
+    .board-card {
+      background: var(--c-surface);
       border: 1px solid var(--c-hairline);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: flex-end;
-      padding: 12px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .swatch-meta {
+      border-radius: var(--r-sm);
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      font-size: 13px;
+      position: relative;
+    }
+    .board-card.white {
+      background: var(--c-paper);
     }
 
-    .swatch-meta strong {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .contrast-badge {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: var(--r-sm);
-      margin-top: 6px;
-      width: fit-content;
-    }
-    .contrast-badge.aaa {
-      background: #2F4A3C;
-      color: #F4EEE1;
-    }
-    .contrast-badge.aa {
-      background: #D8CFBC;
-      color: #1C1A17;
-    }
-
-    /* Type specimens */
-    .type-row {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 24px;
-      padding-block: 20px;
+    .card-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--c-hairline);
-      align-items: baseline;
     }
-
-    .type-meta {
+    .card-eyebrow span {
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--c-muted);
-      line-height: 1.6;
-    }
-
-    /* Comparison tables */
-    .audit-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-      margin-top: 16px;
-    }
-
-    .audit-table th,
-    .audit-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--c-hairline);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .audit-table th {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-weight: 500;
       letter-spacing: 0.08em;
       color: var(--c-muted);
-      background: rgba(28, 26, 23, 0.03);
+      text-transform: uppercase;
+    }
+    .card-eyebrow .badge {
+      color: var(--c-ink);
+      border: 1px solid var(--c-hairline);
+      padding: 1px 6px;
+      border-radius: var(--r-sm);
+      font-size: 10px;
+      background: var(--c-paper);
     }
 
-    .pill-bad {
+    /* Swatch Grid */
+    .swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+    .swatch-box {
+      border: 1px solid var(--c-hairline);
+      border-radius: var(--r-sm);
+      background: var(--c-paper);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .swatch-fill {
+      height: 48px;
+      width: 100%;
+      border-bottom: 1px solid var(--c-hairline);
+    }
+    .swatch-info {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .swatch-info strong {
+      font-size: 11px;
+      color: var(--c-ink);
+    }
+    .swatch-info .usage {
+      color: var(--c-muted);
+      font-size: 9px;
+      line-height: 1.3;
+      margin-top: 2px;
+    }
+    .swatch-info .ratio {
+      color: var(--c-amber);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Typography Specimens */
+    .type-specimen-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      justify-content: space-between;
+    }
+    .type-specimen-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 16px;
+      align-items: baseline;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(216, 207, 188, 0.4);
+    }
+    .type-specimen-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .type-label-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--c-muted);
+      line-height: 1.4;
+    }
+
+    /* Icons Strip */
+    .icon-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .icon-pod {
+      border: 1px solid var(--c-hairline);
+      border-radius: var(--r-sm);
+      background: var(--c-paper);
+      padding: 10px 4px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .icon-pod span {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--c-muted);
+    }
+
+    /* Board Footer Colophon */
+    .board-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px solid var(--c-ink);
       font-family: var(--font-mono);
       font-size: 11px;
-      color: #C4441A;
-      background: rgba(196, 68, 26, 0.1);
-      padding: 2px 6px;
-      border-radius: 2px;
-      display: inline-block;
+      color: var(--c-muted);
     }
-
-    .pill-good {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: #2F4A3C;
-      background: rgba(47, 74, 60, 0.1);
-      padding: 2px 6px;
-      border-radius: 2px;
-      display: inline-block;
+    .board-footer a {
+      color: var(--c-ink);
+      text-decoration: underline;
     }
-
-    @media (max-width: 809px) {
-      .board-header { width: calc(100% - 40px); }
-      .board-section { width: calc(100% - 40px); }
-      .board-grid-2, .board-grid-3, .board-grid-4 { grid-template-columns: 1fr; }
-      .type-row { grid-template-columns: 1fr; gap: 8px; }
+    .board-footer a:hover {
+      color: var(--c-amber);
     }
   </style>
 </head>
 <body>
 
-  <!-- ============================================================
-       BOARD HEADER
-       ============================================================ -->
-  <header class="board-header">
-    <p class="eyebrow">WEB-DIRECTION BOARD &middot; DESIGN SPECIFICATION</p>
-    <h1>Japolic Direction Board</h1>
-    <p>
-      The complete visual system, engineering heritage, typographic hierarchy, color ratios, and component rules governing the Japolic landing page deliverable.
-    </p>
-    <div class="nav-bar-specimen">
-      <a href="index.html" style="font-family: var(--font-mono); font-size: 13px; color: var(--c-amber); text-decoration: underline;">&larr; View Live Landing Page (index.html)</a>
-      <span style="color: var(--c-hairline);">|</span>
-      <a href="components.html" style="font-family: var(--font-mono); font-size: 13px; color: var(--c-ink); text-decoration: underline;">Component Matrix (components.html)</a>
-      <span style="color: var(--c-hairline);">|</span>
-      <a href="assets.html" style="font-family: var(--font-mono); font-size: 13px; color: var(--c-ink); text-decoration: underline;">View SVG Asset Library (assets.html) &rarr;</a>
-    </div>
-  </header>
+  <div class="desk-viewport">
+    
+    <!-- 1440×1800 Finished Studio Presentation Board -->
+    <main class="studio-board" id="studio-board" aria-label="Japolic Web-Direction Board 1440 by 1800">
+      
+      <!-- Outer Corner Registration Marks -->
+      <div class="board-reg tl" aria-hidden="true"></div>
+      <div class="board-reg tr" aria-hidden="true"></div>
+      <div class="board-reg bl" aria-hidden="true"></div>
+      <div class="board-reg br" aria-hidden="true"></div>
 
-  <!-- ============================================================
-       01 — DESIGN THESIS & HERITAGE
-       ============================================================ -->
-  <section class="board-section">
-    <div class="section-title-wrap">
-      <span class="idx">01</span>
-      <h2>Design Thesis &amp; Heritage Alignment</h2>
-    </div>
-
-    <div class="board-grid-2">
-      <div class="spec-card">
-        <span class="spec-card-title">CORE PHILOSOPHY</span>
-        <h3 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 12px;">Warm Ink on Cream Paper</h3>
-        <p style="font-size: 15px; line-height: 1.6; color: var(--c-ink); margin-bottom: 16px;">
-          Japolic avoids the generic visual vocabulary of contemporary developer tools &mdash; neon purple glows, dark-mode blur gradients, playful cartoon illustrations, and pill buttons. Instead, it draws from the physical artifacts of early computer engineering: IBM systems manuals, Bell Labs technical reports, and Rapidograph drafting.
-        </p>
-        <p style="font-size: 14px; line-height: 1.6; color: var(--c-muted);">
-          Every line on the page is structured by a hairline rule (1px). The layout breathes with honest white space, asymmetric column splits, and monospaced measurement callouts.
-        </p>
+      <!-- 12-Column Grid Overlay (Toggleable via button) -->
+      <div class="grid-overlay-layer" id="grid-overlay" aria-hidden="true">
+        <div class="grid-col-stripe"><span>COL 01</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 02</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 03</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 04</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 05</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 06</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 07</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 08</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 09</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 10</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 11</span><span>76px</span></div>
+        <div class="grid-col-stripe"><span>COL 12</span><span>76px</span></div>
       </div>
 
-      <div class="spec-card">
-        <span class="spec-card-title">CRITICAL WORKING CONSTRAINTS</span>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.5;">
-          <li><strong style="color: var(--c-ink);">1. Zero Gradients:</strong> Solid fills only. Depth is created through hairline borders and surface contrasts.</li>
-          <li><strong style="color: var(--c-ink);">2. Zero Box-Shadows:</strong> Structural boundaries are delineated by 1px hairlines (#D8CFBC), not artificial drops.</li>
-          <li><strong style="color: var(--c-ink);">3. Max 2px Border Radius:</strong> No 999px pill shapes or exaggerated bubbly corners.</li>
-          <li><strong style="color: var(--c-ink);">4. Amber Rationing:</strong> #D9822B is strictly restricted to primary CTAs and key measurement data (max 2 visible per viewport).</li>
-          <li><strong style="color: var(--c-ink);">5. Asymmetric Grid splits:</strong> 7/5 hero, 5/1/6 problem, and 8/4 feature &mdash; avoiding generic 6/6 centering.</li>
-        </ul>
+      <!-- ============================================================
+           BOARD HEADER: TITLE, 3 RATIONALE LINES, INTERACTION
+           ============================================================ -->
+      <header class="board-top-strip">
+        <div class="brand-meta">
+          <div class="subline">CLIENT: JAPOLIC &middot; DEV INFRASTRUCTURE</div>
+          <h1>Web-Direction Board</h1>
+          <div class="subline">STUDIO ASSESSMENT &middot; FIGMA-READY ARTBOARD (1440 &times; 1800)</div>
+        </div>
+
+        <!-- 3 Rationale Lines (Core defense) -->
+        <div class="rationale-panel">
+          <div class="rationale-panel-title">Three Architectural Rationale Principles</div>
+          <div class="rationale-line">
+            <strong>1. Archival Technical Authority:</strong> Warm ink on cream paper (<code>#1C1A17</code> on <code>#F4EEE1</code>) replaces generic developer dark-mode glow with the earned trust of Bell Labs and IBM systems documentation.
+          </div>
+          <div class="rationale-line">
+            <strong>2. Structural Restraint:</strong> Zero gradients, zero drop-shadows, and a strict 2px maximum radius treat protocol enforcement as a precision instrument rather than a consumer web product.
+          </div>
+          <div class="rationale-line">
+            <strong>3. Asymmetric Hierarchy:</strong> 7/5 and 8/4 grid splits paired with hairline rules (1px <code>#D8CFBC</code>) guide attention directly to verifiable technical telemetry (<code>&lt; 1.2ms</code>) and declarative rulesets.
+          </div>
+        </div>
+
+        <div class="board-actions">
+          <button type="button" class="grid-toggle-btn" id="toggle-grid-btn" aria-pressed="false">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            <span>TOGGLE 12-COL GRID</span>
+          </button>
+          <span class="board-spec-tag">1440&times;1800 ARTBOARD &middot; WCAG AAA PASS</span>
+        </div>
+      </header>
+
+
+      <!-- ============================================================
+           ROW 1: TYPOGRAPHY HIERARCHY + COLOR PALETTE SWATCHES
+           ============================================================ -->
+      <div class="board-row row-1">
+        
+        <!-- Left: Typography Specimens (820px) -->
+        <section class="board-card white" aria-labelledby="type-specimens-title">
+          <div class="card-eyebrow">
+            <span id="type-specimens-title">01 &mdash; Typography System &amp; Hierarchy</span>
+            <span class="badge">FRAUNCES &middot; IBM PLEX SANS &middot; IBM PLEX MONO</span>
+          </div>
+
+          <div class="type-specimen-stack">
+            <!-- D1 Display -->
+            <div class="type-specimen-item">
+              <div class="type-label-meta">
+                <strong>--t-d1 &middot; Display</strong><br>
+                Fraunces 300<br>
+                80px / 0.92 / -0.03em
+              </div>
+              <div>
+                <div style="font-family: var(--font-display); font-size: 50px; font-weight: 300; line-height: 0.95; letter-spacing: -0.03em;">
+                  Services talk. Nobody agrees on the <em style="font-style: italic; color: var(--c-amber);">rules</em>.
+                </div>
+              </div>
+            </div>
+
+            <!-- D2 Section Header -->
+            <div class="type-specimen-item">
+              <div class="type-label-meta">
+                <strong>--t-d2 &middot; Primary H2</strong><br>
+                Fraunces 300<br>
+                56px / 0.96 / -0.02em
+              </div>
+              <div>
+                <div style="font-family: var(--font-display); font-size: 34px; font-weight: 300; line-height: 1.0; letter-spacing: -0.02em;">
+                  One routing layer. Consistent rules at every boundary.
+                </div>
+              </div>
+            </div>
+
+            <!-- H4 Card Title & Body -->
+            <div class="type-specimen-item">
+              <div class="type-label-meta">
+                <strong>--t-h4 &middot; Grotesque UI</strong><br>
+                IBM Plex Sans 600<br>
+                28px / 1.15 / 0em
+              </div>
+              <div>
+                <div style="font-family: var(--font-body); font-size: 22px; font-weight: 600; line-height: 1.2;">
+                  Protocol Arbitration &amp; Structured Failure Routing
+                </div>
+                <div style="font-family: var(--font-body); font-size: 15px; line-height: 1.55; color: var(--c-ink); margin-top: 4px;">
+                  Japolic sits between services as a lightweight, stateless routing plane. Evaluates each request against a versioned ruleset before destination delivery.
+                </div>
+              </div>
+            </div>
+
+            <!-- Monospace Technical Specimen -->
+            <div class="type-specimen-item">
+              <div class="type-label-meta">
+                <strong>--t-stat &middot; Instrument</strong><br>
+                IBM Plex Mono 500<br>
+                48px &middot; Tabular Numbers
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 28px;">
+                <div>
+                  <span style="font-family: var(--font-mono); font-size: 36px; font-weight: 500; letter-spacing: -0.02em; color: var(--c-amber);">&lt; 1.2ms</span>
+                  <span style="display: block; font-family: var(--font-mono); font-size: 10px; color: var(--c-muted); letter-spacing: 0.08em;">p99 REQUEST LATENCY</span>
+                </div>
+                <div style="border-left: 1px solid var(--c-hairline); padding-left: 20px;">
+                  <span style="font-family: var(--font-mono); font-size: 36px; font-weight: 500; letter-spacing: -0.02em; color: var(--c-ink);">0.00%</span>
+                  <span style="display: block; font-family: var(--font-mono); font-size: 10px; color: var(--c-muted); letter-spacing: 0.08em;">CONTRACT DRIFT LEAKAGE</span>
+                </div>
+                <div style="border-left: 1px solid var(--c-hairline); padding-left: 20px;">
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.10em; color: var(--c-muted);">04 &mdash; POLICY PLANE</span>
+                  <span style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--c-green); margin-top: 4px;">&check; ENFORCEMENT ACTIVE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Color Swatches & Contrast Ratings (492px) -->
+        <section class="board-card" aria-labelledby="color-swatches-title">
+          <div class="card-eyebrow">
+            <span id="color-swatches-title">02 &mdash; Color Palette &amp; Contrast Audit</span>
+            <span class="badge">WCAG AA &amp; AAA RATINGS</span>
+          </div>
+
+          <div class="swatches-grid">
+            <!-- Cream Paper -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-paper);"></div>
+              <div class="swatch-info">
+                <strong>Cream Paper</strong>
+                <span>#F4EEE1</span>
+                <span class="usage">Default surface substrate</span>
+                <span class="ratio">Base Canvas</span>
+              </div>
+            </div>
+
+            <!-- Warm Ink -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-ink);"></div>
+              <div class="swatch-info">
+                <strong>Warm Ink</strong>
+                <span>#1C1A17</span>
+                <span class="usage">Text, headings, footer dark</span>
+                <span class="ratio">14.2:1 (AAA)</span>
+              </div>
+            </div>
+
+            <!-- Amber Accent -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-amber);"></div>
+              <div class="swatch-info">
+                <strong>Amber</strong>
+                <span>#D9822B</span>
+                <span class="usage">CTAs &amp; telemetry emphasis</span>
+                <span class="ratio">4.7:1 Dark (AA)</span>
+              </div>
+            </div>
+
+            <!-- Deep Green -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-green);"></div>
+              <div class="swatch-info">
+                <strong>Deep Green</strong>
+                <span>#2F4A3C</span>
+                <span class="usage">Active status, string values</span>
+                <span class="ratio">7.4:1 (AAA)</span>
+              </div>
+            </div>
+
+            <!-- Hairline -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-hairline);"></div>
+              <div class="swatch-info">
+                <strong>Hairline</strong>
+                <span>#D8CFBC</span>
+                <span class="usage">1px rules, structural dividers</span>
+                <span class="ratio">Structural</span>
+              </div>
+            </div>
+
+            <!-- Warm Muted -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-muted);"></div>
+              <div class="swatch-info">
+                <strong>Warm Muted</strong>
+                <span>#8C8476</span>
+                <span class="usage">Captions, section labels</span>
+                <span class="ratio">4.6:1 (AA)</span>
+              </div>
+            </div>
+
+            <!-- Surface Card -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-surface);"></div>
+              <div class="swatch-info">
+                <strong>Surface Card</strong>
+                <span>#EDE7D7</span>
+                <span class="usage">Card panels, inset layers</span>
+                <span class="ratio">13.1:1 (AAA)</span>
+              </div>
+            </div>
+
+            <!-- Code Surface -->
+            <div class="swatch-box">
+              <div class="swatch-fill" style="background: var(--c-code-bg);"></div>
+              <div class="swatch-info">
+                <strong>Code Surface</strong>
+                <span>#E8E1D0</span>
+                <span class="usage">YAML code block substrate</span>
+                <span class="ratio">12.5:1 (AAA)</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--c-hairline); font-family: var(--font-mono); font-size: 10px; color: var(--c-muted); line-height: 1.4;">
+            <strong>Amber Usage Rule:</strong> Maximum 2 amber elements visible per viewport. Never used as body copy. Contrast audited via WCAG 2.1 algorithm.
+          </div>
+        </section>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================================================
-       02 — COLOR SYSTEM & CONTRAST AUDIT
-       ============================================================ -->
-  <section class="board-section">
-    <div class="section-title-wrap">
-      <span class="idx">02</span>
-      <h2>Color System &amp; WCAG Contrast Audit</h2>
-    </div>
 
-    <div class="board-grid-4">
-      <!-- Cream Paper -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-paper); color: var(--c-ink);">
-          #F4EEE1
-        </div>
-        <div class="swatch-meta">
-          <strong>Cream Paper</strong>
-          <span style="color: var(--c-muted);">--c-paper</span>
-          <span>Default substrate. Warm analog feel.</span>
-          <span class="contrast-badge aaa">Base Canvas</span>
-        </div>
+      <!-- ============================================================
+           ROW 2: UI ELEMENTS + GRAPHIC LANGUAGE & ASSETS
+           ============================================================ -->
+      <div class="board-row row-2">
+
+        <!-- Left: UI Elements & Component Primitives (560px) -->
+        <section class="board-card white" aria-labelledby="ui-primitives-title">
+          <div class="card-eyebrow">
+            <span id="ui-primitives-title">03 &mdash; Tactile UI Elements &amp; Interaction</span>
+            <span class="badge">MAX 2PX RADIUS &middot; NO SHADOW</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1;">
+            <!-- Buttons & Links -->
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--c-muted);">BUTTON STATES</span>
+              
+              <button class="btn btn-primary" style="padding: 10px 18px; font-size: 13px;">Request Access &rarr;</button>
+              <button class="btn btn-secondary" style="padding: 9px 17px; font-size: 13px;">Request Access &rarr;</button>
+              
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                <a href="#" class="arrow-link" style="font-size: 13px;">Read the docs <span class="arrow-symbol">&rarr;</span></a>
+                <span class="state-badge">+4px hover</span>
+              </div>
+
+              <!-- Labeled divider -->
+              <div class="divider-labeled" style="margin-block: 8px;">
+                <span class="divider-labeled-text">OR CLUSTER CLI</span>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" style="font-size: 10px;">ENDPOINT PROXY</label>
+                <input type="text" class="form-input" value="https://ledger.internal:8443" style="padding: 8px 12px; font-size: 12px;">
+              </div>
+            </div>
+
+            <!-- Chips & Status Telemetry -->
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--c-muted);">STATUS INDICATORS</span>
+
+              <div class="chip chip-ok">
+                <span class="chip-dot chip-dot-ok"></span>
+                <span>RUNTIME ACTIVE</span>
+              </div>
+
+              <div class="chip chip-warn">
+                <span class="chip-dot chip-dot-warn"></span>
+                <span>PROTOCOL DEGRADED</span>
+              </div>
+
+              <div class="chip chip-error">
+                <span class="chip-dot chip-dot-error"></span>
+                <span>VIOLATION_4031</span>
+              </div>
+
+              <div class="chip">
+                <span class="chip-dot chip-dot-neutral"></span>
+                <span>YAML MANIFEST</span>
+              </div>
+
+              <!-- Focus ring demonstration -->
+              <div style="margin-top: 8px; padding: 8px; border: 1px dashed var(--c-hairline); border-radius: var(--r-sm);">
+                <span style="font-family: var(--font-mono); font-size: 9px; color: var(--c-muted); display: block; margin-bottom: 4px;">ACCESSIBLE FOCUS RING</span>
+                <button class="btn btn-secondary is-focus" style="padding: 6px 12px; font-size: 11px;">Focus Outline: 2px Amber</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Graphic Language, Mainframe Schematic, Punch Card (752px) -->
+        <section class="board-card" aria-labelledby="graphic-lang-title">
+          <div class="card-eyebrow">
+            <span id="graphic-lang-title">04 &mdash; Graphic Language &amp; Mainframe Lineage</span>
+            <span class="badge">RAPIDOGRAPH 1.5PX &middot; ISOMETRIC SCHEMATICS</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: center; flex: 1;">
+            <!-- Mini Isometric Server Rack Drawing -->
+            <div style="background: var(--c-ink); border-radius: var(--r-sm); border: 1px solid var(--c-hairline); padding: 12px; position: relative;">
+              <div style="position: absolute; top: 6px; left: 6px; font-family: var(--font-mono); font-size: 8px; color: rgba(244,238,225,0.4);">
+                FIG 1.0 &middot; RACK ROUTING PLANE
+              </div>
+              <svg width="100%" height="190" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+                <!-- Rack lines -->
+                <polygon points="100,290 240,360 380,290 380,80 240,150 100,80" fill="rgba(244,238,225,0.025)" stroke="rgba(244,238,225,0.55)" stroke-width="1"/>
+                <polygon points="100,80 240,150 380,80 240,10" fill="rgba(244,238,225,0.05)" stroke="rgba(244,238,225,0.55)" stroke-width="1"/>
+                <polygon points="380,80 380,290 490,220 490,10" fill="rgba(244,238,225,0.035)" stroke="rgba(244,238,225,0.3)" stroke-width="1"/>
+                <!-- Amber routing unit -->
+                <polygon points="108,105 240,175 377,105 377,135 240,205 108,135" fill="rgba(217,130,43,0.15)" stroke="var(--c-amber)" stroke-width="1.25"/>
+                <circle cx="126" cy="120" r="3" fill="var(--c-amber)"/>
+                <circle cx="136" cy="120" r="3" fill="var(--c-green)"/>
+                <text x="150" y="124" font-family="var(--font-mono)" font-size="9" fill="rgba(244,238,225,0.85)">JAPOLIC ROUTING PLANE</text>
+                <!-- Application services -->
+                <polygon points="112,135 240,205 378,135 378,165 240,235 112,165" fill="none" stroke="rgba(244,238,225,0.2)" stroke-width="0.75"/>
+                <text x="150" y="154" font-family="var(--font-mono)" font-size="8" fill="rgba(244,238,225,0.4)">APP SVC &mdash; PAYMENTS</text>
+                <polygon points="116,165 240,235 379,165 379,195 240,265 116,195" fill="none" stroke="rgba(244,238,225,0.2)" stroke-width="0.75"/>
+                <text x="150" y="184" font-family="var(--font-mono)" font-size="8" fill="rgba(244,238,225,0.4)">APP SVC &mdash; LEDGER</text>
+              </svg>
+            </div>
+
+            <!-- Punch card motif + Technical Icons -->
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Punch card motif preview -->
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 9px; color: var(--c-muted); letter-spacing: 0.08em; display: block; margin-bottom: 4px;">
+                  IBM 80-COL PUNCH CARD (HOLLERITH CUT)
+                </span>
+                <svg width="100%" height="40" viewBox="0 0 720 70" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="1" width="718" height="68" rx="2" fill="var(--c-paper)" stroke="var(--c-hairline)" stroke-width="1"/>
+                  <polygon points="1,1 24,1 1,24" fill="var(--c-surface)"/>
+                  <line x1="1" y1="24" x2="24" y2="1" stroke="var(--c-hairline)" stroke-width="1"/>
+                  <g fill="var(--c-surface)" stroke="var(--c-hairline)" stroke-width="0.75">
+                    <circle cx="36" cy="14" r="4"/><circle cx="96" cy="14" r="4"/><circle cx="156" cy="14" r="4"/><circle cx="216" cy="14" r="4"/><circle cx="276" cy="14" r="4"/><circle cx="336" cy="14" r="4"/><circle cx="396" cy="14" r="4"/><circle cx="456" cy="14" r="4"/><circle cx="516" cy="14" r="4"/><circle cx="576" cy="14" r="4"/><circle cx="636" cy="14" r="4"/><circle cx="696" cy="14" r="4"/>
+                  </g>
+                  <g fill="var(--c-surface)" stroke="var(--c-hairline)" stroke-width="0.5">
+                    <rect x="54" y="34" width="8" height="18" rx="1"/>
+                    <rect x="114" y="40" width="8" height="18" rx="1"/>
+                    <rect x="234" y="34" width="8" height="18" rx="1"/>
+                    <rect x="354" y="40" width="8" height="18" rx="1"/>
+                    <rect x="474" y="34" width="8" height="18" rx="1"/>
+                    <rect x="594" y="40" width="8" height="18" rx="1"/>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Rapidograph 1.5px Icons -->
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 9px; color: var(--c-muted); letter-spacing: 0.08em; display: block; margin-bottom: 4px;">
+                  RAPIDOGRAPH 0.35MM LINE ICONS (24&times;24)
+                </span>
+                <div class="icon-strip">
+                  <!-- route -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h8l2 4-2 4H3" stroke="var(--c-ink)" stroke-width="1.5"/><circle cx="5" cy="6" r="1.5" stroke="var(--c-ink)" stroke-width="1.5"/><circle cx="19" cy="12" r="1.5" stroke="var(--c-ink)" stroke-width="1.5"/></svg>
+                    <span>route</span>
+                  </div>
+                  <!-- protocol -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="6" height="6" stroke="var(--c-ink)" stroke-width="1.5"/><rect x="16" y="3" width="6" height="6" stroke="var(--c-ink)" stroke-width="1.5"/><line x1="5" y1="9" x2="5" y2="18" stroke="var(--c-ink)" stroke-width="1.5"/></svg>
+                    <span>protocol</span>
+                  </div>
+                  <!-- policy -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="1" stroke="var(--c-ink)" stroke-width="1.5"/><path d="M14.5 17l1.5 2L20 15" stroke="var(--c-amber)" stroke-width="1.5"/></svg>
+                    <span>policy</span>
+                  </div>
+                  <!-- latency -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--c-ink)" stroke-width="1.5"/><line x1="12" y1="12" x2="16" y2="15" stroke="var(--c-amber)" stroke-width="1.5"/></svg>
+                    <span>latency</span>
+                  </div>
+                  <!-- success -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5"/></svg>
+                    <span>success</span>
+                  </div>
+                  <!-- mesh -->
+                  <div class="icon-pod">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="5" r="2" stroke="var(--c-ink)" stroke-width="1.5"/><circle cx="12" cy="12" r="2" stroke="var(--c-amber)" stroke-width="1.5"/><line x1="7" y1="6" x2="10.5" y2="10.5" stroke="var(--c-ink)" stroke-width="1.5"/></svg>
+                    <span>mesh</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
       </div>
 
-      <!-- Warm Ink -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-ink); color: var(--c-paper);">
-          #1C1A17
-        </div>
-        <div class="swatch-meta">
-          <strong>Warm Ink</strong>
-          <span style="color: var(--c-muted);">--c-ink</span>
-          <span>Primary copy, headings, footer.</span>
-          <span class="contrast-badge aaa">14.2:1 vs Paper (AAA)</span>
-        </div>
+
+      <!-- ============================================================
+           ROW 3: TECHNICAL CODE & TELEMETRY + LAYOUT AUDIT & RATIOS
+           ============================================================ -->
+      <div class="board-row row-3">
+
+        <!-- Left: Code Surface & Terminal CLI (740px) -->
+        <section class="board-card white" aria-labelledby="code-telemetry-title">
+          <div class="card-eyebrow">
+            <span id="code-telemetry-title">05 &mdash; Declarative Config &amp; CLI Telemetry</span>
+            <span class="badge">YAML SPEC &middot; OPENTELEMETRY TRACE HOOKS</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1;">
+            <!-- YAML block -->
+            <div class="code-box" style="margin: 0;">
+              <div class="code-box-header">
+                <span class="code-box-title">japolic.rules (config)</span>
+                <span class="code-box-meta">DIFFABLE IN CI</span>
+              </div>
+              <pre class="code-box-content" style="padding: 16px; font-size: 11px; line-height: 1.55;"><code><span class="syn-key">route</span>:
+  <span class="syn-key">source</span>: <span class="syn-val">payments-service</span>
+  <span class="syn-key">destination</span>: <span class="syn-val">ledger-service</span>
+  <span class="syn-key">method</span>: <span class="syn-val">POST</span>
+  <span class="syn-key">path</span>: <span class="syn-val">/entries</span>
+  <span class="syn-key">require-headers</span>:
+    - <span class="syn-val">X-Idempotency-Key</span>
+  <span class="syn-key">response-schema</span>: <span class="syn-val">./ledger.json</span>
+  <span class="syn-key">on-violation</span>: <span class="syn-val">return-error</span>
+  <span class="syn-key">error-code</span>: <span class="syn-num">PROTO_4031</span></code></pre>
+            </div>
+
+            <!-- Terminal Snippet -->
+            <div class="terminal-snippet" style="padding: 16px; font-size: 11px;">
+              <div class="terminal-header" style="margin-bottom: 10px; padding-bottom: 6px;">
+                <span>JAPOLIC DAEMON v1.0</span>
+                <span>STATUS: ACTIVE</span>
+              </div>
+              <div class="terminal-line">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-cmd">japolic verify --rules ./japolic.rules</span>
+              </div>
+              <div class="terminal-output ok">
+                &check; 12 service boundaries verified
+              </div>
+              <div class="terminal-output ok">
+                &check; 0 contract violations detected
+              </div>
+              <div class="terminal-line" style="margin-top: 10px;">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-cmd">japolic benchmark --p99</span>
+              </div>
+              <div class="terminal-output warn">
+                p99 latency overhead: 0.82ms
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 10px; color: var(--c-muted); line-height: 1.4;">
+            <strong>Contract Enforcement:</strong> Policies deployed as atomic Git commits. No sidecar restarts or application redeployments required.
+          </div>
+        </section>
+
+        <!-- Right: Spatial Rhythm, Grid Specs, Anti-Patterns (572px) -->
+        <section class="board-card" aria-labelledby="spatial-specs-title">
+          <div class="card-eyebrow">
+            <span id="spatial-specs-title">06 &mdash; Spatial Grid System &amp; Anti-Patterns</span>
+            <span class="badge">12-COL DESKTOP &middot; 4-COL MOBILE</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px; flex: 1; font-size: 12px;">
+            <!-- Grid Specs Table -->
+            <div style="background: var(--c-paper); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); padding: 12px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-family: var(--font-mono); font-size: 11px;">
+                <div><strong>Desktop 1440px:</strong></div>
+                <div style="color: var(--c-muted);">1200px max / 12 col / 24px gutter</div>
+                <div><strong>Mobile 390px:</strong></div>
+                <div style="color: var(--c-muted);">350px max / 4 col / 16px gutter</div>
+                <div><strong>Spacing Base:</strong></div>
+                <div style="color: var(--c-muted);">8px multiple (--sp-8 through --sp-160)</div>
+                <div><strong>Border Radius:</strong></div>
+                <div style="color: var(--c-amber); font-weight: 500;">Max 2px (--r-sm) &middot; No Pills</div>
+              </div>
+            </div>
+
+            <!-- Anti-Pattern Defense -->
+            <div style="display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 10.5px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--c-hairline); padding-bottom: 4px;">
+                <span style="color: #C4441A;">&cross; Centered H1 &amp; Symmetrical 6/6</span>
+                <span style="color: var(--c-green);">&check; 7/5 Asymmetric editorial split</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--c-hairline); padding-bottom: 4px;">
+                <span style="color: #C4441A;">&cross; Neon Gradients &amp; Blurs</span>
+                <span style="color: var(--c-green);">&check; Warm Ink on Cream Paper (#F4EEE1)</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--c-hairline); padding-bottom: 4px;">
+                <span style="color: #C4441A;">&cross; Pill Buttons (border-radius: 999px)</span>
+                <span style="color: var(--c-green);">&check; Strict 2px radius mechanical feel</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="color: #C4441A;">&cross; Generic Hype ("Revolutionary AI")</span>
+                <span style="color: var(--c-green);">&check; Factual metrics (&lt; 1.2ms latency)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
 
-      <!-- Amber Accent -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-amber); color: var(--c-ink);">
-          #D9822B
-        </div>
-        <div class="swatch-meta">
-          <strong>Amber Accent</strong>
-          <span style="color: var(--c-muted);">--c-amber</span>
-          <span>CTAs &amp; critical stat callouts only.</span>
-          <span class="contrast-badge aa">4.7:1 on Dark (AA)</span>
-        </div>
-      </div>
 
-      <!-- Deep Green -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-green); color: var(--c-paper);">
-          #2F4A3C
-        </div>
-        <div class="swatch-meta">
-          <strong>Deep Green</strong>
-          <span style="color: var(--c-muted);">--c-green</span>
-          <span>Status indicators &amp; string literals.</span>
-          <span class="contrast-badge aaa">7.4:1 on Paper (AAA)</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="board-grid-4" style="margin-top: 20px;">
-      <!-- Hairline -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-hairline); color: var(--c-ink);">
-          #D8CFBC
-        </div>
-        <div class="swatch-meta">
-          <strong>Hairline</strong>
-          <span style="color: var(--c-muted);">--c-hairline</span>
-          <span>All 1px dividers, grid strokes.</span>
-        </div>
-      </div>
-
-      <!-- Warm Muted -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-muted); color: var(--c-paper);">
-          #8C8476
-        </div>
-        <div class="swatch-meta">
-          <strong>Warm Muted</strong>
-          <span style="color: var(--c-muted);">--c-muted</span>
-          <span>Monospace labels &amp; captions.</span>
-          <span class="contrast-badge aa">4.6:1 vs Paper (AA)</span>
-        </div>
-      </div>
-
-      <!-- Surface Card -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-surface); color: var(--c-ink);">
-          #EDE7D7
-        </div>
-        <div class="swatch-meta">
-          <strong>Surface Card</strong>
-          <span style="color: var(--c-muted);">--c-surface</span>
-          <span>Panels, feature card substrate.</span>
-          <span class="contrast-badge aaa">13.1:1 Ink (AAA)</span>
-        </div>
-      </div>
-
-      <!-- Code Surface -->
-      <div class="spec-card">
-        <div class="swatch" style="background: var(--c-code-bg); color: var(--c-ink);">
-          #E8E1D0
-        </div>
-        <div class="swatch-meta">
-          <strong>Code Surface</strong>
-          <span style="color: var(--c-muted);">--c-code-bg</span>
-          <span>YAML &amp; technical code blocks.</span>
-          <span class="contrast-badge aaa">12.5:1 Ink (AAA)</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       03 — TYPOGRAPHY SPECIMEN
-       ============================================================ -->
-  <section class="board-section">
-    <div class="section-title-wrap">
-      <span class="idx">03</span>
-      <h2>Typography Hierarchy &amp; Specimen Scale</h2>
-    </div>
-
-    <div class="spec-card white">
-      <!-- D1 -->
-      <div class="type-row">
-        <div class="type-meta">
-          <strong>--t-d1</strong><br>
-          Fraunces 300<br>
-          80px / 0.92 lh<br>
-          Track -0.03em
-        </div>
+      <!-- ============================================================
+           BOARD FOOTER COLOPHON
+           ============================================================ -->
+      <footer class="board-footer">
         <div>
-          <div style="font-family: var(--font-display); font-size: 64px; font-weight: 300; line-height: 0.92; letter-spacing: -0.03em;">
-            Services talk. Nobody agrees on the <em style="font-style: italic; color: var(--c-amber);">rules</em>.
-          </div>
+          BOARD METRICS: 1440 &times; 1800PX &middot; 8PX SPATIAL SYSTEM &middot; JAPOLIC DESIGN DIRECTION v1.0
         </div>
-      </div>
+        <div style="display: flex; gap: 20px;">
+          <a href="index.html">&larr; Live Landing Page (index.html)</a>
+          <a href="components.html">Components (components.html)</a>
+          <a href="assets.html">SVG Asset Library (assets.html)</a>
+        </div>
+      </footer>
 
-      <!-- D2 -->
-      <div class="type-row">
-        <div class="type-meta">
-          <strong>--t-d2</strong><br>
-          Fraunces 300<br>
-          56px / 0.96 lh<br>
-          Track -0.02em
-        </div>
-        <div>
-          <div style="font-family: var(--font-display); font-size: 44px; font-weight: 300; line-height: 0.96; letter-spacing: -0.02em;">
-            One routing layer. Consistent rules at every boundary.
-          </div>
-        </div>
-      </div>
+    </main>
+  </div>
 
-      <!-- D3 / H4 -->
-      <div class="type-row">
-        <div class="type-meta">
-          <strong>--t-h4</strong><br>
-          IBM Plex Sans 600<br>
-          28px / 1.15 lh
-        </div>
-        <div>
-          <div style="font-family: var(--font-body); font-size: 28px; font-weight: 600; line-height: 1.15;">
-            Protocol Arbitration &amp; Failure Routing
-          </div>
-        </div>
-      </div>
-
-      <!-- Body LG -->
-      <div class="type-row">
-        <div class="type-meta">
-          <strong>--t-body-lg</strong><br>
-          IBM Plex Sans 400<br>
-          18px / 1.65 lh
-        </div>
-        <div>
-          <div style="font-family: var(--font-body); font-size: 18px; line-height: 1.65; max-width: 600px;">
-            Japolic sits between services as a lightweight, stateless routing plane. It holds the protocol negotiation and policy enforcement.
-          </div>
-        </div>
-      </div>
-
-      <!-- Label -->
-      <div class="type-row">
-        <div class="type-meta">
-          <strong>--t-label</strong><br>
-          IBM Plex Mono 500<br>
-          13px / Track 0.10em
-        </div>
-        <div>
-          <div style="font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.10em; color: var(--c-muted);">
-            04 &mdash; FEATURE: POLICY PLANE &middot; SPEC v1.0
-          </div>
-        </div>
-      </div>
-
-      <!-- Stat -->
-      <div class="type-row" style="border-bottom: none;">
-        <div class="type-meta">
-          <strong>--t-stat</strong><br>
-          IBM Plex Mono 500<br>
-          48px / Track -0.02em
-        </div>
-        <div>
-          <div style="font-family: var(--font-mono); font-size: 48px; font-weight: 500; letter-spacing: -0.02em; color: var(--c-amber);">
-            &lt; 1.2ms
-          </div>
-          <div style="font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--c-muted);">
-            p99 REQUEST LATENCY OVERHEAD
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       04 — COMPONENT SPECIMENS
-       ============================================================ -->
-  <section class="board-section">
-    <div class="section-title-wrap">
-      <span class="idx">04</span>
-      <h2>Component Design System Spec</h2>
-    </div>
-
-    <div class="board-grid-3">
-      <!-- Buttons -->
-      <div class="spec-card">
-        <span class="spec-card-title">BUTTON STYLES</span>
-        <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
-          <div>
-            <div style="font-size: 12px; color: var(--c-muted); margin-bottom: 6px;">Primary CTA:</div>
-            <button class="btn-primary" style="display: inline-block;">Request Access &rarr;</button>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--c-muted); margin-bottom: 6px;">Ghost / Outlined:</div>
-            <button class="btn-ghost" style="display: inline-block;">Request Access &rarr;</button>
-          </div>
-          <div>
-            <div style="font-size: 12px; color: var(--c-muted); margin-bottom: 6px;">Text Arrow Link:</div>
-            <a href="#" class="text-arrow-link">Read documentation <span class="arrow">&rarr;</span></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Status Chips -->
-      <div class="spec-card">
-        <span class="spec-card-title">STATUS CHIPS</span>
-        <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
-          <div class="status-chip">
-            <span class="status-dot ok"></span>
-            <span>ACTIVE ENFORCEMENT</span>
-          </div>
-          <div class="status-chip">
-            <span class="status-dot warn"></span>
-            <span>DEGRADED PROTOCOL</span>
-          </div>
-          <div class="status-chip">
-            <span class="status-dot error"></span>
-            <span>BOUNDARY VIOLATION</span>
-          </div>
-        </div>
-        <p style="font-size: 12px; color: var(--c-muted); margin-top: 20px;">
-          Status dots: 6px circles with 2px radius chip boundaries. Never conveys information through color alone.
-        </p>
-      </div>
-
-      <!-- Code Block Rule -->
-      <div class="spec-card">
-        <span class="spec-card-title">SYNTAX CODE FORMATTING</span>
-        <div style="background: var(--c-code-bg); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); padding: 16px; font-family: var(--font-mono); font-size: 12px; line-height: 1.6;">
-          <div><span style="color: var(--c-muted);"># Rule definition</span></div>
-          <div><span style="color: var(--c-ink); font-weight: 500;">route</span>:</div>
-          <div>&nbsp;&nbsp;<span style="color: var(--c-ink); font-weight: 500;">source</span>: <span style="color: var(--c-green);">payments</span></div>
-          <div>&nbsp;&nbsp;<span style="color: var(--c-ink); font-weight: 500;">code</span>: <span style="color: var(--c-amber);">4031</span></div>
-        </div>
-        <p style="font-size: 12px; color: var(--c-muted); margin-top: 16px;">
-          Minimal syntax color rules: ink keys, green string values, muted comments, amber numeric error codes.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       05 — PRINCIPLES VS ANTI-PATTERNS (FROM REFERENCES.MD)
-       ============================================================ -->
-  <section class="board-section">
-    <div class="section-title-wrap">
-      <span class="idx">05</span>
-      <h2>Studio Critique: Principles Applied &amp; Anti-Patterns Rejected</h2>
-    </div>
-
-    <div class="spec-card white" style="padding: 0; overflow: hidden;">
-      <table class="audit-table">
-        <thead>
-          <tr>
-            <th style="width: 35%;">Zyner.io Anti-Pattern Rejected</th>
-            <th style="width: 35%;">Japolic Studio Principle Applied</th>
-            <th style="width: 30%;">Rationale &amp; Defense</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Symmetrical 6/6 &amp; Centered H1</td>
-            <td><span class="pill-good">APPLIED</span> 7/5 Asymmetric Grid Split</td>
-            <td>Left alignment creates editorial authority; technical schematics balance copy naturally.</td>
-          </tr>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Pill Buttons (border-radius: 999px)</td>
-            <td><span class="pill-good">APPLIED</span> Strict 2px Radius (--r-sm)</td>
-            <td>Signals precision instrument design rather than consumer app friendliness.</td>
-          </tr>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Purple / Cyan Gradient Fills</td>
-            <td><span class="pill-good">APPLIED</span> Warm Ink on Cream Paper (#F4EEE1)</td>
-            <td>Heritage typography inspired by IBM systems documentation and Bell Labs.</td>
-          </tr>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Unfocused Amber Overuse</td>
-            <td><span class="pill-good">APPLIED</span> Strict Amber Rationing (Max 2/view)</td>
-            <td>Reserves visual punch exclusively for decisive user actions and verified latency stats.</td>
-          </tr>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Vague Hype ("Supercharge your APIs")</td>
-            <td><span class="pill-good">APPLIED</span> Factual Headline: &lt; 10 Words</td>
-            <td>Speaks directly to infrastructure leads with concrete engineering statements.</td>
-          </tr>
-          <tr>
-            <td><span class="pill-bad">REJECTED</span> Generic Icon Packs &amp; Stock Photography</td>
-            <td><span class="pill-good">APPLIED</span> Rapidograph 1.5px Hand-Crafted SVGs</td>
-            <td>All graphics derive from physical mainframe units and Hollerith punch cards.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
+  <!-- Interactive Grid Toggle Script -->
+  <script>
+    (function() {
+      const toggleBtn = document.getElementById('toggle-grid-btn');
+      const gridOverlay = document.getElementById('grid-overlay');
+      if (toggleBtn && gridOverlay) {
+        toggleBtn.addEventListener('click', function() {
+          const isActive = gridOverlay.classList.toggle('is-active');
+          toggleBtn.classList.toggle('is-active', isActive);
+          toggleBtn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          toggleBtn.querySelector('span').textContent = isActive ? 'GRID OVERLAY: ON' : 'TOGGLE 12-COL GRID';
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
