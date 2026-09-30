@@ -315,82 +315,226 @@
     </section>
 
     <!-- ============================================================
-         02 — THE PROBLEM
+         02 — ARCHITECTURE COMPARISON (BEFORE / AFTER)
          ============================================================ -->
-    <section class="problem-section" id="problem" aria-labelledby="problem-title">
+    <section class="transform-section" id="problem" aria-labelledby="transform-title">
       <div class="container">
-        <div class="problem-grid">
-          <!-- 5-Column Left Header & Friction Breakdown -->
-          <div class="problem-header-col">
-            <span class="label">02 &mdash; Problem</span>
-            <h2 class="section-h2" id="problem-title">
-              Boundary assumptions that were never written down.
-            </h2>
-            <p class="body-lead" style="color: var(--c-muted);">
-              When internal services scale past eight instances, integration logic degrades into ad-hoc glue code. Each team solves protocol mismatches in isolation.
-            </p>
+        
+        <!-- Header: 1 Headline & Exactly 2 Lines of Copy -->
+        <div class="transform-header">
+          <span class="label">02 &mdash; ARCHITECTURAL TRANSFORMATION</span>
+          <h2 class="transform-h2" id="transform-title">
+            One routing layer eliminates point-to-point chaos.
+          </h2>
+          <div class="transform-copy">
+            <p>Without an explicit arbitration plane, integration logic lives duplicated in application codebases, causing contract drift and cascading timeouts.</p>
+            <p>Japolic sits between services as a stateless boundary layer, normalizing protocols and enforcing versioned rules before requests reach downstream endpoints.</p>
+          </div>
+        </div>
 
-            <div class="problem-callout-box">
-              <div class="problem-callout-title">
-                <!-- Warning/Violation Icon -->
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M12 3L2 21h20L12 3z" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <line x1="12" y1="10" x2="12" y2="15" stroke="var(--c-ink)" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="12" cy="18" r="0.75" fill="var(--c-ink)" stroke="var(--c-ink)" stroke-width="0.5"/>
-                </svg>
-                <span>COMMON BOUNDARY FAILURES</span>
-              </div>
-              <ul class="problem-items-list">
-                <li class="problem-item">
-                  <span class="problem-item-code">ERR_PAYLOAD_DRIFT</span>
-                  <span>Upstream caller expects REST JSON; downstream responds with Protobuf stream or unformatted 500 HTML.</span>
-                </li>
-                <li class="problem-item">
-                  <span class="problem-item-code">ERR_RETRY_STORM</span>
-                  <span>Uncoordinated exponential backoffs trigger downstream cascade timeouts across 20+ services.</span>
-                </li>
-                <li class="problem-item">
-                  <span class="problem-item-code">ERR_OPAQUE_FAULT</span>
-                  <span>Root causes require 40&ndash;80 minutes of manual log stitching across separate team silos.</span>
-                </li>
-              </ul>
+        <!-- Before / After Visual: Tangled Left, Ordered Right (Drawn in SVG) -->
+        <div class="transform-frame" role="region" aria-label="Before and after architectural diagram comparing tangled ad-hoc microservices with ordered Japolic routing plane">
+          <!-- Engineering corner registration marks -->
+          <div class="reg-mark-tl" style="border-color: var(--c-hairline); position: absolute; top: 8px; left: 8px; width: 12px; height: 12px; border-style: solid; border-width: 1px 0 0 1px;"></div>
+          <div class="reg-mark-tr" style="border-color: var(--c-hairline); position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-style: solid; border-width: 1px 1px 0 0;"></div>
+          <div class="reg-mark-bl" style="border-color: var(--c-hairline); position: absolute; bottom: 8px; left: 8px; width: 12px; height: 12px; border-style: solid; border-width: 0 0 1px 1px;"></div>
+          <div class="reg-mark-br" style="border-color: var(--c-hairline); position: absolute; bottom: 8px; right: 8px; width: 12px; height: 12px; border-style: solid; border-width: 0 1px 1px 0;"></div>
+
+          <div class="transform-frame-header">
+            <div class="transform-col-title">
+              <span class="chip chip-error">
+                <span class="chip-dot chip-dot-error"></span>
+                <span>BEFORE JAPOLIC &middot; AD-HOC HANDSHAKES</span>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">TANGLED LOGIC</span>
+            </div>
+            <div class="transform-col-title">
+              <span class="chip chip-ok">
+                <span class="chip-dot chip-dot-ok"></span>
+                <span>WITH JAPOLIC &middot; BOUNDARY ROUTING PLANE</span>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">DETERMINISTIC BUS</span>
             </div>
           </div>
 
-          <!-- 1-Column Center Hairline Divider -->
-          <div class="problem-divider-col">
-            <div class="vertical-rule"></div>
+          <!-- SVG Visual Diagram -->
+          <div class="transform-svg-wrap">
+            <svg width="100%" height="auto" viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vector diagram showing tangled point-to-point connections on the left transformed into an ordered routing bus on the right">
+              <defs>
+                <marker id="arr-ink-comp" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0.5 L5,3 L0,5.5 Z" fill="var(--c-ink)"/>
+                </marker>
+                <marker id="arr-amber-comp" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M0,0.5 L5,3 L0,5.5 Z" fill="var(--c-amber)"/>
+                </marker>
+              </defs>
+
+              <!-- LEFT: TANGLED INFRASTRUCTURE -->
+              <g id="tangled-infra">
+                <!-- Crisscrossing tangled lines -->
+                <path d="M 130,78 C 260,180 280,30 410,118" stroke="rgba(28,26,23,0.35)" stroke-width="1.25" stroke-dasharray="4,3" fill="none"/>
+                <path d="M 130,78 C 180,260 310,60 410,278" stroke="#C4441A" stroke-width="1.5" stroke-dasharray="3,3" fill="none"/>
+                
+                <path d="M 130,178 C 220,120 310,240 410,118" stroke="#C4441A" stroke-width="1.5" fill="none"/>
+                <path d="M 130,178 C 260,260 280,100 410,198" stroke="rgba(28,26,23,0.4)" stroke-width="1.25" stroke-dasharray="5,3" fill="none"/>
+                <path d="M 130,178 C 240,40 330,320 410,278" stroke="rgba(28,26,23,0.35)" stroke-width="1.25" fill="none"/>
+
+                <path d="M 130,278 C 240,240 280,300 410,198" stroke="#C4441A" stroke-width="1.5" stroke-dasharray="4,2" fill="none"/>
+                <path d="M 130,278 C 300,100 240,20 410,118" stroke="rgba(28,26,23,0.35)" stroke-width="1.25" fill="none"/>
+
+                <!-- Friction Callout Badges -->
+                <g transform="translate(230, 85)">
+                  <rect x="0" y="0" width="130" height="22" rx="2" fill="rgba(196,68,26,0.12)" stroke="#C4441A" stroke-width="1"/>
+                  <text x="65" y="14" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" fill="#C4441A" font-weight="500">ERR_PAYLOAD_DRIFT</text>
+                </g>
+                <g transform="translate(180, 185)">
+                  <rect x="0" y="0" width="136" height="22" rx="2" fill="rgba(196,68,26,0.12)" stroke="#C4441A" stroke-width="1"/>
+                  <text x="68" y="14" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" fill="#C4441A" font-weight="500">CASCADE RETRY STORM</text>
+                </g>
+                <g transform="translate(250, 265)">
+                  <rect x="0" y="0" width="140" height="22" rx="2" fill="rgba(28,26,23,0.06)" stroke="var(--c-hairline)" stroke-width="1"/>
+                  <text x="70" y="14" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" fill="var(--c-muted)">MISSING IDEMPOTENCY</text>
+                </g>
+
+                <!-- Left Source Nodes -->
+                <rect x="30" y="55" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="80" y="75" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">auth-svc</text>
+                <text x="80" y="89" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">REST &middot; HTTP/1.1</text>
+
+                <rect x="30" y="155" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="80" y="175" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">payments</text>
+                <text x="80" y="189" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">REST &middot; HTTP/2</text>
+
+                <rect x="30" y="255" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="80" y="275" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">billing-svc</text>
+                <text x="80" y="289" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">CUSTOM RPC</text>
+
+                <!-- Left Target Nodes -->
+                <rect x="410" y="95" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="460" y="115" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">ledger-svc</text>
+                <text x="460" y="129" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">gRPC Protobuf</text>
+
+                <rect x="410" y="175" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="460" y="195" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">analytics</text>
+                <text x="460" y="209" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">WebSocket</text>
+
+                <rect x="410" y="255" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="460" y="275" text-anchor="middle" font-family="var(--font-mono)" font-size="10" font-weight="500" fill="var(--c-ink)">legacy-crm</text>
+                <text x="460" y="289" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-muted)">HTTP/1.0 legacy</text>
+              </g>
+
+              <!-- CENTER DIVIDER -->
+              <g id="center-boundary">
+                <line x1="550" y1="20" x2="550" y2="340" stroke="var(--c-hairline)" stroke-width="1" stroke-dasharray="6,4"/>
+                <circle cx="550" cy="180" r="14" fill="var(--c-paper)" stroke="var(--c-hairline)" stroke-width="1"/>
+                <text x="550" y="184" text-anchor="middle" font-family="var(--font-mono)" font-size="9" fill="var(--c-muted)" font-weight="600">VS</text>
+              </g>
+
+              <!-- RIGHT: ORDERED JAPOLIC ARCHITECTURE -->
+              <g id="ordered-infra">
+                <!-- Clean Ingress Traces -->
+                <line x1="680" y1="78" x2="795" y2="78" stroke="var(--c-ink)" stroke-width="1.5" marker-end="url(#arr-ink-comp)"/>
+                <line x1="680" y1="178" x2="795" y2="178" stroke="var(--c-amber)" stroke-width="1.75" marker-end="url(#arr-amber-comp)"/>
+                <line x1="680" y1="278" x2="795" y2="278" stroke="var(--c-ink)" stroke-width="1.5" marker-end="url(#arr-ink-comp)"/>
+
+                <!-- Ingress Nodes -->
+                <rect x="590" y="55" width="90" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="635" y="75" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="500" fill="var(--c-ink)">auth-svc</text>
+                <text x="635" y="89" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-muted)">REST &middot; JSON</text>
+
+                <rect x="590" y="155" width="90" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-amber)" stroke-width="1.5"/>
+                <text x="635" y="175" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="600" fill="var(--c-ink)">payments</text>
+                <text x="635" y="189" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-amber)">HTTP/2</text>
+
+                <rect x="590" y="255" width="90" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="635" y="275" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="500" fill="var(--c-ink)">billing-svc</text>
+                <text x="635" y="289" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-muted)">ANY FORMAT</text>
+
+                <!-- THE JAPOLIC ROUTING BUS -->
+                <rect x="800" y="40" width="56" height="280" rx="2" fill="rgba(217,130,43,0.12)" stroke="var(--c-amber)" stroke-width="1.5"/>
+                <text x="828" y="145" text-anchor="middle" font-family="var(--font-mono)" font-size="8.5" font-weight="600" fill="var(--c-amber)" letter-spacing="0.10em" transform="rotate(-90 828 145)">JAPOLIC ROUTING PLANE</text>
+                
+                <circle cx="828" cy="78" r="3.5" fill="var(--c-amber)"/>
+                <circle cx="828" cy="178" r="4.5" fill="var(--c-amber)"/>
+                <circle cx="828" cy="278" r="3.5" fill="var(--c-amber)"/>
+
+                <!-- Clean Egress Traces -->
+                <line x1="856" y1="78" x2="965" y2="78" stroke="var(--c-ink)" stroke-width="1.5" marker-end="url(#arr-ink-comp)"/>
+                <line x1="856" y1="178" x2="965" y2="178" stroke="var(--c-amber)" stroke-width="1.75" marker-end="url(#arr-amber-comp)"/>
+                <line x1="856" y1="278" x2="965" y2="278" stroke="var(--c-ink)" stroke-width="1.5" marker-end="url(#arr-ink-comp)"/>
+
+                <!-- Egress Verified Nodes -->
+                <rect x="970" y="55" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="1020" y="75" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="500" fill="var(--c-ink)">ledger-svc</text>
+                <text x="1020" y="89" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-green)">&check; gRPC VERIFIED</text>
+
+                <rect x="970" y="155" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-amber)" stroke-width="1.5"/>
+                <text x="1020" y="175" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="600" fill="var(--c-ink)">analytics</text>
+                <text x="1020" y="189" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-green)">&check; PROTOCOL NORMALIZED</text>
+
+                <rect x="970" y="255" width="100" height="46" rx="2" fill="var(--c-paper)" stroke="var(--c-ink)" stroke-width="1.25"/>
+                <text x="1020" y="275" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" font-weight="500" fill="var(--c-ink)">legacy-crm</text>
+                <text x="1020" y="289" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--c-green)">&check; DOWNWARD TRANSLATED</text>
+
+                <!-- Status Badges -->
+                <g transform="translate(870, 115)">
+                  <rect x="0" y="0" width="85" height="18" rx="2" fill="rgba(47,74,60,0.1)" stroke="var(--c-green)" stroke-width="0.75"/>
+                  <text x="42.5" y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-green)" font-weight="500">&lt; 0.84ms p99</text>
+                </g>
+                <g transform="translate(870, 215)">
+                  <rect x="0" y="0" width="85" height="18" rx="2" fill="rgba(47,74,60,0.1)" stroke="var(--c-green)" stroke-width="0.75"/>
+                  <text x="42.5" y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="7.5" fill="var(--c-green)" font-weight="500">DIFF IN CI</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Hierarchy First: 3 Proof Points Grid Directly Below Visual -->
+        <div class="proof-grid">
+          <!-- Proof Point 1 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-stat">0</div>
+              <span class="proof-label">TIMEOUT CASCADES IN 90 DAYS</span>
+              <p class="proof-desc">
+                A single declarative retry-policy rule replaces uncoordinated client retries and completely eliminates downstream cascade timeouts.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-16); font-family: var(--font-mono); font-size: 11px; color: var(--c-green);">
+              &check; VERIFIED IN PRODUCTION
+            </div>
           </div>
 
-          <!-- 6-Column Right Body & Analysis -->
-          <div class="problem-body-col">
-            <p class="body-lead">
-              Every internal service boundary is a handshake negotiated ad hoc: one team uses REST with custom error codes, another uses gRPC with Protobuf contracts, a third has a legacy HTTP/1.1 endpoint that will not be migrated.
-            </p>
-            <p class="body-lead">
-              When these services call each other, the integration logic lives in application code &mdash; duplicated across teams, inconsistently enforced, and opaque in failure.
-            </p>
-            <p class="body-lead">
-              The result is incidents that trace back not to bad code, but to boundary assumptions that were never written down.
-            </p>
+          <!-- Proof Point 2 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-stat">&lt; 1.2ms</div>
+              <span class="proof-label">p99 LATENCY OVERHEAD</span>
+              <p class="proof-desc">
+                Stateless protocol arbitration benchmarked at 10,000 req/sec on a 2-core container runtime with zero telemetry leakage.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-16); font-family: var(--font-mono); font-size: 11px; color: var(--c-amber);">
+              &check; DETERMINISTIC BENCHMARK
+            </div>
+          </div>
 
-            <!-- Technical Registration Frame Specimen -->
-            <div style="margin-top: var(--sp-48); background: var(--c-surface); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); padding: var(--sp-24);">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--c-muted);">BOUNDARY INVENTORY &middot; AUDIT SUMMARY</span>
-                <span class="status-chip" style="padding: 2px 8px; font-size: 11px;">
-                  <span class="status-dot warn"></span>
-                  <span>HIGH PROTOCOL VARIANCE</span>
-                </span>
-              </div>
-              <div style="font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: var(--c-ink);">
-                <div>Target Environment: 8&ndash;80 microservice clusters</div>
-                <div>Unwritten Contracts: Avg 14 undocumented boundary endpoints</div>
-                <div>Mean Remediation Time: 52 minutes per boundary failure</div>
-              </div>
+          <!-- Proof Point 3 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-stat">100%</div>
+              <span class="proof-label">AUDITABLE CONTRACT COMPLIANCE</span>
+              <p class="proof-desc">
+                Rules are versioned in Git diffs; violations return structured error codes at the boundary before bad data reaches downstream services.
+              </p>
+            </div>
+            <div style="margin-top: var(--sp-16); font-family: var(--font-mono); font-size: 11px; color: var(--c-green);">
+              &check; OPENTELEMETRY NATIVE
             </div>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -755,8 +899,8 @@
     <!-- ============================================================
          CTA ACCESS SECTION
          ============================================================ -->
-    <section class="section" id="request-access" style="background: var(--c-surface); border-bottom: 1px solid var(--c-hairline);">
-      <div class="container" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gutter); align-items: center;">
+    <section class="section" id="request-access" style="background: var(--c-surface); border-bottom: 1px solid var(--c-hairline); padding-block: var(--section-pad-y);">
+      <div class="container cta-access-grid" style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gutter); align-items: center;">
         <div style="grid-column: span 7;">
           <span class="label">06 &mdash; Access</span>
           <h2 class="section-h2" style="margin-bottom: var(--sp-16);">
@@ -767,11 +911,11 @@
           </p>
         </div>
         <div style="grid-column: span 5; display: flex; flex-direction: column; gap: var(--sp-16);">
-          <form style="display: flex; flex-direction: column; gap: var(--sp-12);" onsubmit="event.preventDefault(); alert('Request submitted. We will review your infrastructure parameters.');">
+          <form style="display: flex; flex-direction: column; gap: var(--sp-12);" onsubmit="event.preventDefault(); alert('Request submitted. We will review your infrastructure parameters.');">  
             <label for="work-email" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--c-muted);">WORK EMAIL (ENGINEERING DOMAIN)</label>
-            <div style="display: flex; gap: var(--sp-8);">
-              <input type="email" id="work-email" required placeholder="lead@company.internal" style="flex: 1; padding: 12px 16px; background: var(--c-paper); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 13px; color: var(--c-ink);">
-              <button type="submit" class="btn-primary" style="padding: 12px 20px;">Request Access &rarr;</button>
+            <div style="display: flex; gap: var(--sp-8); flex-wrap: wrap;">
+              <input type="email" id="work-email" required placeholder="lead@company.internal" style="flex: 1; min-width: 180px; padding: 12px 16px; background: var(--c-paper); border: 1px solid var(--c-hairline); border-radius: var(--r-sm); font-family: var(--font-mono); font-size: 13px; color: var(--c-ink);">
+              <button type="submit" class="btn-primary" style="padding: 12px 20px; white-space: nowrap;">Request Access &rarr;</button>
             </div>
             <span style="font-family: var(--font-mono); font-size: 11px; color: var(--c-muted);">
               Deterministic onboarding &middot; Zero telemetry exfiltration

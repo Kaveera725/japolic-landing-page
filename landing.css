@@ -277,9 +277,10 @@
 }
 
 /* ============================================================
-   STATUS CHIP
+   STATUS CHIP / CHIP ALIASES
    ============================================================ */
-.status-chip {
+.status-chip,
+.chip {
   display: inline-flex;
   align-items: center;
   border: var(--chip-border);
@@ -292,7 +293,19 @@
   width: fit-content;
 }
 
-.status-dot {
+/* State variant chips */
+.chip-ok {
+  border-color: rgba(47, 74, 60, 0.4);
+  color: var(--c-green);
+}
+
+.chip-error {
+  border-color: rgba(196, 68, 26, 0.4);
+  color: #C4441A;
+}
+
+.status-dot,
+.chip-dot {
   width: var(--chip-dot-size);
   height: var(--chip-dot-size);
   border-radius: var(--r-full);
@@ -300,15 +313,18 @@
   flex-shrink: 0;
 }
 
-.status-dot.ok {
+.status-dot.ok,
+.chip-dot-ok {
   background-color: var(--c-status-ok);
 }
 
-.status-dot.warn {
+.status-dot.warn,
+.chip-dot-warn {
   background-color: var(--c-status-warn);
 }
 
-.status-dot.error {
+.status-dot.error,
+.chip-dot-error {
   background-color: var(--c-status-error);
 }
 
@@ -912,7 +928,7 @@
 }
 
 .use-case-row:first-of-type {
-  border-top: 1px solid var(--c-ink);
+  border-top: 2px solid var(--c-hairline);
   margin-top: var(--sp-48);
 }
 
@@ -1107,14 +1123,127 @@
   transition: color var(--transition-hover);
 }
 
-.footer-social-link:hover {
-  color: var(--c-paper);
+/* ============================================================
+   BEFORE / AFTER ARCHITECTURAL VISUAL & PROOF POINTS
+   ============================================================ */
+.transform-section {
+  padding-block: var(--section-pad-y);
+  border-bottom: 1px solid var(--c-hairline);
+  background-color: var(--c-paper);
+}
+
+.transform-header {
+  margin-bottom: var(--sp-48);
+}
+
+.transform-h2 {
+  font-family: var(--t-d2-family);
+  font-size: var(--t-d2-size);
+  font-weight: var(--t-d2-weight);
+  line-height: var(--t-d2-lh);
+  letter-spacing: var(--t-d2-track);
+  color: var(--c-ink);
+  margin-bottom: var(--sp-16);
+  max-width: 900px;
+}
+
+.transform-copy {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--c-ink);
+  max-width: 840px;
+}
+
+.transform-copy p {
+  margin-bottom: 6px;
+}
+.transform-copy p:last-child {
+  margin-bottom: 0;
+}
+
+/* Before/After Visual Frame */
+.transform-frame {
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  padding: var(--sp-32);
+  margin-bottom: var(--sp-48);
+  position: relative;
+}
+
+.transform-frame-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-32);
+  margin-bottom: var(--sp-24);
+  padding-bottom: var(--sp-16);
+  border-bottom: 1px solid var(--c-hairline);
+}
+
+.transform-col-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.transform-svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* 3 Proof Points Grid */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gutter);
+}
+
+.proof-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  padding: var(--sp-24);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.proof-stat {
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--c-amber);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.proof-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.proof-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--c-ink);
 }
 
 /* ============================================================
    RESPONSIVE OVERRIDES (MOBILE <= 809px)
    ============================================================ */
 @media (max-width: 809px) {
+  /* tokens.css already handles mobile type-scale + spacing overrides */
+
+  /* --- NAV: hide desktop links, show hamburger --- */
   .nav-links,
   .nav-actions .nav-signin-link,
   .nav-actions .nav-cta-btn,
@@ -1151,6 +1280,7 @@
     border-bottom: 1px solid var(--c-hairline);
   }
 
+  /* --- HERO: stack columns, resize headline --- */
   .hero-content {
     display: flex;
     flex-direction: column;
@@ -1163,8 +1293,15 @@
     width: 100%;
   }
 
-  .hero-h1 {
-    font-size: var(--t-d1-size);
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-trust-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-12);
   }
 
   .punch-card-strip-wrap {
@@ -1177,6 +1314,19 @@
     height: auto;
   }
 
+  /* --- BEFORE/AFTER: stack frame header labels --- */
+  .transform-frame-header {
+    grid-template-columns: 1fr;
+    gap: var(--sp-12);
+  }
+
+  /* --- PROOF GRID: single column on mobile --- */
+  .proof-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-16);
+  }
+
+  /* --- PROBLEM SECTION --- */
   .problem-grid {
     display: flex;
     flex-direction: column;
@@ -1187,6 +1337,7 @@
     display: none;
   }
 
+  /* --- SOLUTION --- */
   .solution-header-grid {
     display: flex;
     flex-direction: column;
@@ -1208,6 +1359,7 @@
     gap: var(--sp-16);
   }
 
+  /* --- FEATURE/POLICY PLANE --- */
   .feature-grid {
     display: flex;
     flex-direction: column;
@@ -1220,6 +1372,7 @@
     width: 100%;
   }
 
+  /* --- USE CASES --- */
   .use-case-row {
     display: flex;
     flex-direction: column;
@@ -1227,10 +1380,22 @@
   }
 
   .metrics-grid {
-    grid-template-columns: 1fr;
-    gap: var(--sp-16);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-12);
   }
 
+  .metric-number {
+    font-size: 24px;
+  }
+
+  /* --- CTA SECTION --- */
+  .cta-access-grid {
+    display: flex !important;
+    flex-direction: column;
+    gap: var(--sp-32);
+  }
+
+  /* --- FOOTER --- */
   .footer-top {
     grid-template-columns: 1fr;
     gap: var(--sp-32);
