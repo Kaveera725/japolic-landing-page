@@ -1,0 +1,588 @@
+/*
+ * components.css
+ * Japolic Design System — Reusable Component Library
+ * 
+ * Rules:
+ * 1. DESIGN.md is the single source of truth.
+ * 2. Flat & tactile: NO box-shadows, NO glows, NO blurs, NO gradients.
+ * 3. Max border-radius: 2px (var(--r-sm)). Pill shapes prohibited.
+ * 4. Hairline borders: 1px solid var(--c-hairline).
+ * 5. Uses CSS custom properties from tokens.css exclusively.
+ */
+
+/* ============================================================
+   1. BUTTONS (Primary, Secondary / Ghost, Text / Arrow)
+   All states: Default, Hover, Focus, Active, Disabled
+   ============================================================ */
+
+/* Base button reset & common behavior */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  font-family: var(--font-body);
+  font-size: var(--btn-primary-size);
+  line-height: 1.2;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  border: 1px solid transparent;
+  transition: background-color var(--transition-hover),
+              border-color var(--transition-hover),
+              color var(--transition-hover);
+}
+
+.btn:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* 1.1 Primary Button (Amber Fill) */
+.btn-primary {
+  background-color: var(--c-amber);
+  color: var(--c-ink);
+  font-weight: 600;
+  padding: 14px 28px;
+  border-color: var(--c-amber);
+}
+
+.btn-primary:hover,
+.btn-primary.is-hover {
+  background-color: var(--c-amber-hover);
+  border-color: var(--c-amber-hover);
+  color: var(--c-ink);
+}
+
+.btn-primary:active,
+.btn-primary.is-active {
+  background-color: var(--c-amber-active);
+  border-color: var(--c-amber-active);
+  color: var(--c-ink);
+}
+
+.btn-primary:focus,
+.btn-primary.is-focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.btn-primary:disabled,
+.btn-primary.is-disabled {
+  background-color: var(--c-hairline);
+  border-color: var(--c-hairline);
+  color: var(--c-muted);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* 1.2 Secondary Button (Ghost / Hairline Ink) */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--c-ink);
+  font-weight: 500;
+  padding: 13px 27px;
+  border: 1px solid var(--c-ink);
+}
+
+.btn-secondary:hover,
+.btn-secondary.is-hover {
+  border-color: var(--c-amber);
+  color: var(--c-amber);
+  background-color: transparent;
+}
+
+.btn-secondary:active,
+.btn-secondary.is-active {
+  border-color: var(--c-amber-active);
+  color: var(--c-amber-active);
+  background-color: rgba(217, 130, 43, 0.06);
+}
+
+.btn-secondary:focus,
+.btn-secondary.is-focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.btn-secondary:disabled,
+.btn-secondary.is-disabled {
+  border-color: var(--c-hairline);
+  color: var(--c-muted);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* 1.3 Text Button / Link */
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  border-radius: var(--r-sm);
+  transition: color var(--transition-hover), text-decoration var(--transition-hover);
+}
+
+.btn-text:hover,
+.btn-text.is-hover {
+  color: var(--c-ink);
+  text-decoration: underline;
+}
+
+.btn-text:active,
+.btn-text.is-active {
+  color: var(--c-amber);
+}
+
+.btn-text:focus,
+.btn-text.is-focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.btn-text:disabled,
+.btn-text.is-disabled {
+  color: var(--c-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   2. ARROW LINK
+   Text link with animated directional arrow
+   ============================================================ */
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--c-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-hover);
+  border-radius: var(--r-sm);
+}
+
+.arrow-link .arrow-symbol {
+  display: inline-block;
+  font-family: var(--font-mono);
+  transition: transform var(--transition-hover);
+}
+
+.arrow-link:hover,
+.arrow-link.is-hover {
+  text-decoration: underline;
+}
+
+.arrow-link:hover .arrow-symbol,
+.arrow-link.is-hover .arrow-symbol {
+  transform: translateX(4px);
+}
+
+.arrow-link:focus,
+.arrow-link.is-focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.arrow-link:disabled,
+.arrow-link.is-disabled {
+  color: var(--c-muted);
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: none;
+}
+.arrow-link:disabled .arrow-symbol,
+.arrow-link.is-disabled .arrow-symbol {
+  transform: none;
+}
+
+/* ============================================================
+   3. NAVIGATION LINK
+   Default, Hover, Focus, Active, Current
+   ============================================================ */
+.nav-item-link {
+  font-family: var(--nav-link-family);
+  font-size: var(--nav-link-size);
+  font-weight: var(--nav-link-weight);
+  color: var(--c-ink);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  position: relative;
+  transition: color var(--transition-hover);
+  display: inline-block;
+}
+
+.nav-item-link:hover,
+.nav-item-link.is-hover {
+  color: var(--c-muted);
+}
+
+.nav-item-link:focus,
+.nav-item-link.is-focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.nav-item-link:active,
+.nav-item-link.is-active {
+  color: var(--c-amber);
+}
+
+/* Current active page indicator */
+.nav-item-link.is-current,
+.nav-item-link[aria-current="page"] {
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.nav-item-link.is-current::after,
+.nav-item-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background-color: var(--c-amber);
+}
+
+/* ============================================================
+   4. TAGS & STATUS CHIPS
+   Variants: ok, warn, error, neutral
+   Sizes: default, small
+   ============================================================ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--c-muted);
+  background-color: transparent;
+  line-height: 1.2;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.chip-sm {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+/* Status dots (6px circle per DESIGN.md 4.8) */
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-full);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.chip-dot-ok {
+  background-color: var(--c-green);
+}
+
+.chip-dot-warn {
+  background-color: var(--c-amber);
+}
+
+.chip-dot-error {
+  background-color: var(--c-status-error);
+}
+
+.chip-dot-neutral {
+  background-color: var(--c-muted);
+}
+
+/* Colored border/text subtle variants */
+.chip-ok {
+  color: var(--c-ink);
+  border-color: rgba(47, 74, 60, 0.4);
+  background-color: rgba(47, 74, 60, 0.04);
+}
+
+.chip-warn {
+  color: var(--c-ink);
+  border-color: rgba(217, 130, 43, 0.4);
+  background-color: rgba(217, 130, 43, 0.04);
+}
+
+.chip-error {
+  color: var(--c-status-error);
+  border-color: rgba(196, 68, 26, 0.4);
+  background-color: rgba(196, 68, 26, 0.05);
+}
+
+/* ============================================================
+   5. CODE BLOCKS
+   Syntax formatting: ink keys, green strings, muted comments, amber numbers
+   ============================================================ */
+.code-box {
+  background-color: var(--c-code-bg);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+.code-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: rgba(28, 26, 23, 0.04);
+  border-bottom: 1px solid var(--c-hairline);
+  font-size: 12px;
+}
+
+.code-box-title {
+  font-weight: 500;
+  color: var(--c-ink);
+  letter-spacing: 0.04em;
+}
+
+.code-box-meta {
+  color: var(--c-muted);
+  font-size: 11px;
+}
+
+.code-box-content {
+  padding: 24px 28px;
+  margin: 0;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.70;
+  color: var(--c-ink);
+  tab-size: 2;
+}
+
+.code-box-content code {
+  font-family: inherit;
+}
+
+/* Syntax minimal coloring per DESIGN.md 4.4 */
+.syn-comment { color: var(--c-muted); font-style: normal; }
+.syn-key     { color: var(--c-ink); font-weight: 500; }
+.syn-val     { color: var(--c-green); }
+.syn-num     { color: var(--c-amber); }
+.syn-punct   { color: var(--c-muted); }
+
+/* ============================================================
+   6. TERMINAL SNIPPET
+   Interactive command prompt & structured output
+   ============================================================ */
+.terminal-snippet {
+  background-color: var(--c-ink);
+  color: var(--c-paper);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(216, 207, 188, 0.15);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(244, 238, 225, 0.5);
+}
+
+.terminal-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+  margin-bottom: 6px;
+}
+
+.terminal-prompt {
+  color: var(--c-amber);
+  font-weight: 500;
+  user-select: none;
+}
+
+.terminal-cmd {
+  color: var(--c-paper);
+  font-weight: 500;
+}
+
+.terminal-output {
+  color: rgba(244, 238, 225, 0.7);
+  padding-left: 18px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.terminal-output.ok {
+  color: #7AA288;
+}
+
+.terminal-output.warn {
+  color: var(--c-amber);
+}
+
+/* ============================================================
+   7. FORM INPUTS
+   Default, Focused, Filled, Disabled, Error states
+   ============================================================ */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  width: 100%;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--c-ink);
+  text-transform: uppercase;
+}
+
+.form-input {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 12px 16px;
+  background-color: var(--c-paper);
+  border: 1px solid var(--c-hairline);
+  border-radius: var(--r-sm);
+  color: var(--c-ink);
+  outline: none;
+  transition: border-color var(--transition-hover), background-color var(--transition-hover);
+}
+
+.form-input::placeholder {
+  color: var(--c-muted);
+}
+
+.form-input:hover,
+.form-input.is-hover {
+  border-color: var(--c-muted);
+}
+
+.form-input:focus,
+.form-input.is-focus {
+  border-color: var(--c-ink);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.form-input:disabled,
+.form-input.is-disabled {
+  background-color: var(--c-surface);
+  border-color: var(--c-hairline);
+  color: var(--c-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error State */
+.form-field.has-error .form-input,
+.form-input.is-error {
+  border-color: var(--c-status-error);
+}
+
+.form-field.has-error .form-input:focus,
+.form-input.is-error:focus {
+  outline: 2px solid var(--c-status-error);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.form-error-msg {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-status-error);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-help-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-muted);
+}
+
+/* ============================================================
+   8. DIVIDERS
+   Horizontal Hairline, Vertical Hairline, Labeled Divider
+   ============================================================ */
+/* 8.1 Horizontal hairline */
+.divider-hairline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--c-hairline);
+  border: none;
+  margin-block: var(--sp-24);
+}
+
+/* 8.2 Vertical hairline */
+.divider-vertical {
+  display: inline-block;
+  width: 1px;
+  height: 100%;
+  min-height: 32px;
+  background-color: var(--c-hairline);
+  border: none;
+  vertical-align: middle;
+}
+
+/* 8.3 Labeled divider */
+.divider-labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+  width: 100%;
+  margin-block: var(--sp-24);
+}
+
+.divider-labeled::before,
+.divider-labeled::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--c-hairline);
+}
+
+.divider-labeled-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
