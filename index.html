@@ -913,129 +913,195 @@
          ============================================================ -->
     <section class="use-cases-section" id="use-cases" aria-labelledby="use-cases-title">
       <div class="container">
-        <span class="label">05 &mdash; Use Cases</span>
-        <h2 class="section-h2" id="use-cases-title">
-          Proven under operational load.
-        </h2>
-        <p class="body-lead" style="max-width: var(--t-measure-body);">
-          Real-world infrastructure situations where ambiguous contracts caused measurable incidents &mdash; and how explicit protocol enforcement resolved them.
-        </p>
-
-        <!-- Use Case 1: Fintech -->
-        <div class="use-case-row">
-          <div class="use-case-left">
-            <span class="use-case-category">CASE 01 &middot; FINTECH PLATFORM INFRASTRUCTURE</span>
-            <h3 class="use-case-title">Platform Team at a Fintech</h3>
-            <p class="use-case-situation">
-              A 40-engineer fintech runs 22 internal services. Three teams have independently built retry logic into their HTTP clients. After a downstream timeout cascade, the post-mortem traces the failure to inconsistent retry intervals and missing idempotency headers.
-            </p>
-            <div class="use-case-japolic">
-              <div class="use-case-japolic-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
-                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>HOW JAPOLIC WAS DEPLOYED</span>
-              </div>
-              <p class="use-case-japolic-text">
-                Platform team defines a single <code style="font-family: var(--font-mono); font-size: 12px; background: var(--c-paper); padding: 1px 4px; border-radius: 2px;">retry-policy</code> rule applied globally to all POST requests. Header requirements are enforced at the boundary. Teams remove their own retry logic and consume the Japolic error payload instead.
-              </p>
-            </div>
+        <!-- 7/5 Asymmetric Header to balance against Section 04 -->
+        <div class="use-cases-header">
+          <div>
+            <span class="label">05 &mdash; Use Cases</span>
+            <h2 class="section-h2" id="use-cases-title">
+              Proven under operational load.
+            </h2>
           </div>
-          <div class="use-case-right">
-            <div class="metrics-grid">
-              <div class="metric-item">
-                <div class="metric-number accent">0</div>
-                <div class="metric-label">TIMEOUT CASCADES IN 90 DAYS POST-DEPLOY</div>
-              </div>
-              <div class="metric-item">
-                <div class="metric-number">0/mo</div>
-                <div class="metric-label">DUPLICATE TRANSACTIONS (DOWN FROM 4/MO)</div>
-              </div>
-              <div class="metric-item">
-                <div class="metric-number">~1,400</div>
-                <div class="metric-label">LINES OF CUSTOM RETRY CODE REMOVED</div>
-              </div>
-            </div>
-          </div>
+          <p class="use-cases-header-sub">
+            Three production benchmarks where ambiguous contracts caused systemic incidents &mdash; and how declarative protocol enforcement eliminated them.
+          </p>
         </div>
 
-        <!-- Use Case 2: Protocol Migration -->
-        <div class="use-case-row">
-          <div class="use-case-left">
-            <span class="use-case-category">CASE 02 &middot; PROTOCOL MIGRATION</span>
-            <h3 class="use-case-title">Protocol Migration: REST to gRPC</h3>
-            <p class="use-case-situation">
-              A backend team is migrating 6 internal services from REST to gRPC over 3 months. During the migration, callers and providers exist on different protocol versions simultaneously. Testing the in-between state requires standing up mock services.
-            </p>
-            <div class="use-case-japolic">
-              <div class="use-case-japolic-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
-                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>HOW JAPOLIC WAS DEPLOYED</span>
-              </div>
-              <p class="use-case-japolic-text">
-                Japolic's protocol arbitration layer translates gRPC calls to REST for legacy endpoints during the migration window. The calling service is updated once and speaks only gRPC. Japolic handles downward translation until each provider completes migration.
-              </p>
-            </div>
-          </div>
-          <div class="use-case-right">
-            <div class="metrics-grid">
-              <div class="metric-item">
-                <div class="metric-number accent">11 wks</div>
-                <div class="metric-label">MIGRATION TIME (DOWN FROM 6 MO ESTIMATED)</div>
-              </div>
-              <div class="metric-item">
-                <div class="metric-number">0</div>
-                <div class="metric-label">BREAKING CHANGES SURFACED UPSTREAM</div>
-              </div>
-              <div class="metric-item">
-                <div class="metric-number">3</div>
-                <div class="metric-label">MOCK INTERNAL SERVICES DECOMMISSIONED</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Ruled Table-Like Ledger Frame -->
+        <div class="use-cases-table-frame" role="region" aria-label="Production Use Cases Matrix">
+          <!-- Corner registration marks matching Section 04 -->
+          <div class="cases-reg tl"></div>
+          <div class="cases-reg tr"></div>
+          <div class="cases-reg bl"></div>
+          <div class="cases-reg br"></div>
 
-        <!-- Use Case 3: On-Call Debugging -->
-        <div class="use-case-row">
-          <div class="use-case-left">
-            <span class="use-case-category">CASE 03 &middot; INCIDENT RESPONSE &amp; ON-CALL</span>
-            <h3 class="use-case-title">Debugging Boundary Failures</h3>
-            <p class="use-case-situation">
-              An on-call engineer receives a P2 alert. The error surfaces in service A but originates at the boundary between service B and service C. Standard logs show a 500 with no structured payload. Tracing the chain manually takes 40&ndash;80 minutes per incident.
-            </p>
-            <div class="use-case-japolic">
-              <div class="use-case-japolic-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9" stroke="var(--c-green)" stroke-width="1.5"/>
-                  <path d="M8 12l3 3 5-5" stroke="var(--c-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>HOW JAPOLIC WAS DEPLOYED</span>
-              </div>
-              <p class="use-case-japolic-text">
-                Every boundary violation produces a structured log entry: source service, destination service, rule violated, request hash, timestamp, and response received. The engineer queries the Japolic log stream with two filters and identifies root cause in under 5 minutes.
-              </p>
-            </div>
+          <!-- Table Meta Header Bar -->
+          <div class="cases-table-meta">
+            <span>TABLE 05.1 // PRODUCTION VERIFICATION MATRIX // 3 SYSTEM BENCHMARKS</span>
+            <span class="cases-meta-verified">
+              <span class="cases-dot-live"></span> VERIFIED IN PROD
+            </span>
           </div>
-          <div class="use-case-right">
-            <div class="metrics-grid">
-              <div class="metric-item">
-                <div class="metric-number accent">4.5m</div>
-                <div class="metric-label">MEAN TIME TO ROOT CAUSE (WAS 52 MIN)</div>
+
+          <!-- Table Column Headers -->
+          <div class="cases-thead" role="row">
+            <div class="cases-th" role="columnheader">[ 01 // AUDIENCE &amp; SCALE ]</div>
+            <div class="cases-th" role="columnheader">[ 02 // CONTRACT INTERVENTION &amp; OUTCOME ]</div>
+            <div class="cases-th" role="columnheader">[ 03 // MEASURED IMPACT ]</div>
+            <div class="cases-th" role="columnheader">[ 04 // PROTOCOL SPEC ]</div>
+          </div>
+
+          <!-- Table Body Rows -->
+          <div class="cases-tbody" role="rowgroup">
+
+            <!-- ROW 01: Fintech Platform -->
+            <div class="cases-trow" role="row">
+              <div class="case-col-audience">
+                <span class="case-badge">CASE 01 &middot; FINTECH</span>
+                <h3 class="case-audience-heading">Platform Team at a Fintech</h3>
+                <div class="case-context-spec">
+                  <span class="context-tag">22 internal services</span>
+                  <span class="case-context-sep">&middot;</span>
+                  <span class="context-tag">40 engineers</span>
+                </div>
+                <p class="case-problem-summary">
+                  Cascading timeout failures caused by uncoordinated client retries and missing idempotency headers across caller services.
+                </p>
               </div>
-              <div class="metric-item">
-                <div class="metric-number">-60%</div>
-                <div class="metric-label">INCIDENTS REQUIRING CROSS-TEAM ESCALATION</div>
+
+              <div class="case-col-outcome">
+                <div class="case-intervention-label">POLICY INTERVENTION:</div>
+                <p class="case-outcome-desc">
+                  Platform team defined a single global <code class="inline-code">retry-policy</code> rule enforced at the Japolic boundary. Header requirements and idempotency keys are validated before dispatch; caller services purged custom retry loops and consumed Japolic structured error payloads.
+                </p>
+                <div class="case-deliverables-strip">
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> Global idempotency enforcement at ingress</span>
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> ~1,400 lines of disparate client retry code removed</span>
+                </div>
               </div>
-              <div class="metric-item">
-                <div class="metric-number">-50%</div>
-                <div class="metric-label">ESCALATIONS TO SENIOR STAFF ENGINEERS</div>
+
+              <div class="case-col-metric">
+                <div class="case-metric-block">
+                  <div class="case-metric-number">0</div>
+                  <div class="case-metric-unit">TIMEOUT CASCADES</div>
+                  <div class="case-metric-note">in 90 days post-deployment</div>
+                </div>
+                <div class="case-submetric-list">
+                  <div class="submetric-row"><span class="submetric-value">0/mo</span> duplicate txs <span class="submetric-baseline">(was 4/mo)</span></div>
+                  <div class="submetric-row"><span class="submetric-value">~1,400</span> LOC purged</div>
+                </div>
+              </div>
+
+              <div class="case-col-link">
+                <a href="#request-access" class="case-action-link" aria-label="Review Case 01 specification and policy rule">
+                  <span class="case-action-text">Read spec</span>
+                  <span class="case-action-arrow">&rarr;</span>
+                </a>
+                <span class="case-spec-id">DOC: SPEC-FIN-01</span>
               </div>
             </div>
+
+            <!-- ROW 02: Protocol Migration -->
+            <div class="cases-trow" role="row">
+              <div class="case-col-audience">
+                <span class="case-badge">CASE 02 &middot; PROTOCOL MIGRATION</span>
+                <h3 class="case-audience-heading">Infrastructure Lead</h3>
+                <div class="case-context-spec">
+                  <span class="context-tag">6 services</span>
+                  <span class="case-context-sep">&middot;</span>
+                  <span class="context-tag">REST &rarr; gRPC</span>
+                </div>
+                <p class="case-problem-summary">
+                  Migrating backend services across differing protocol versions simultaneously, requiring costly and brittle mock services.
+                </p>
+              </div>
+
+              <div class="case-col-outcome">
+                <div class="case-intervention-label">POLICY INTERVENTION:</div>
+                <p class="case-outcome-desc">
+                  Japolic's protocol arbitration layer translated gRPC calls to REST for legacy endpoints during the migration window. Calling services were updated once to speak pure gRPC, with Japolic managing downward translation until each provider completed migration.
+                </p>
+                <div class="case-deliverables-strip">
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> Upstream callers decoupled from provider roadmap</span>
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> 3 mock internal services decommissioned early</span>
+                </div>
+              </div>
+
+              <div class="case-col-metric">
+                <div class="case-metric-block">
+                  <div class="case-metric-number">11 wks</div>
+                  <div class="case-metric-unit">MIGRATION WINDOW</div>
+                  <div class="case-metric-note">down from 6 months estimated</div>
+                </div>
+                <div class="case-submetric-list">
+                  <div class="submetric-row"><span class="submetric-value">0</span> breaking changes surfaced</div>
+                  <div class="submetric-row"><span class="submetric-value">3</span> mock services retired</div>
+                </div>
+              </div>
+
+              <div class="case-col-link">
+                <a href="#request-access" class="case-action-link" aria-label="Review Case 02 specification and migration policy">
+                  <span class="case-action-text">Read spec</span>
+                  <span class="case-action-arrow">&rarr;</span>
+                </a>
+                <span class="case-spec-id">DOC: SPEC-MIG-02</span>
+              </div>
+            </div>
+
+            <!-- ROW 03: On-Call Reliability -->
+            <div class="cases-trow" role="row">
+              <div class="case-col-audience">
+                <span class="case-badge">CASE 03 &middot; INCIDENT RESPONSE</span>
+                <h3 class="case-audience-heading">On-Call Reliability Engineer</h3>
+                <div class="case-context-spec">
+                  <span class="context-tag">Cross-service boundary</span>
+                  <span class="case-context-sep">&middot;</span>
+                  <span class="context-tag">P2 triage</span>
+                </div>
+                <p class="case-problem-summary">
+                  Blind HTTP 500 status codes with no structured payload required 40&ndash;80 minutes of manual log correlation across services.
+                </p>
+              </div>
+
+              <div class="case-col-outcome">
+                <div class="case-intervention-label">POLICY INTERVENTION:</div>
+                <p class="case-outcome-desc">
+                  Every boundary contract violation produces an immediate structured audit record: caller identity, destination service, rule violated, request hash, and response. The engineer queries the Japolic telemetry stream with two filters to pinpoint the root cause in under 5 minutes.
+                </p>
+                <div class="case-deliverables-strip">
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> Deterministic contract failure payloads</span>
+                  <span class="deliverable-item"><span class="deliv-icon">&check;</span> Eliminated cross-team triage war rooms</span>
+                </div>
+              </div>
+
+              <div class="case-col-metric">
+                <div class="case-metric-block">
+                  <div class="case-metric-number">4.5m</div>
+                  <div class="case-metric-unit">ROOT CAUSE MTTR</div>
+                  <div class="case-metric-note">down from 52 min average</div>
+                </div>
+                <div class="case-submetric-list">
+                  <div class="submetric-row"><span class="submetric-value">-60%</span> cross-team escalations</div>
+                  <div class="submetric-row"><span class="submetric-value">-50%</span> senior staff triage alerts</div>
+                </div>
+              </div>
+
+              <div class="case-col-link">
+                <a href="#request-access" class="case-action-link" aria-label="Review Case 03 specification and telemetry policy">
+                  <span class="case-action-text">Read spec</span>
+                  <span class="case-action-arrow">&rarr;</span>
+                </a>
+                <span class="case-spec-id">DOC: SPEC-SRE-03</span>
+              </div>
+            </div>
+
           </div>
+
+          <!-- Table Meta Footer Bar -->
+          <div class="cases-table-footer">
+            <span>SHOWING 3 OF 3 VERIFIED CASE HISTORIES</span>
+            <span>ALL METRICS SOURCED FROM PRODUCTION OEL LOGS &amp; POST-MORTEM AUDITS</span>
+          </div>
+
         </div>
 
       </div>
@@ -1080,77 +1146,179 @@
        ============================================================ -->
   <footer class="site-footer" id="footer" aria-label="Site Footer">
     <div class="container">
-      <div class="footer-top">
-        <!-- Brand & Tagline -->
-        <div class="footer-brand-col">
-          <span class="footer-wordmark">Japolic</span>
-          <p class="footer-tagline">
-            Lightweight, stateless routing layer enforcing protocol compliance between internal services.
+
+      <!-- 1. Brand, Mission & Live Operational Status Indicator -->
+      <div class="footer-hero-band">
+        <div class="footer-mission-col">
+          <a href="#hero" class="footer-brand-lockup" aria-label="Japolic Homepage">
+            <span class="brand-logomark" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="20" height="20" rx="2" stroke="var(--c-paper)" stroke-width="1.5" />
+                <path d="M2 12h8l4-4h8" stroke="var(--c-paper)" stroke-width="1.25" stroke-linecap="round" />
+                <path d="M10 12l4 4h8" stroke="var(--c-paper)" stroke-width="1.25" stroke-linecap="round" />
+                <circle cx="10" cy="12" r="2.5" fill="var(--c-amber)" />
+              </svg>
+            </span>
+            <span class="footer-brand-title">Japolic</span>
+            <span class="footer-brand-badge">v1.0-RFC4</span>
+          </a>
+          <p class="footer-mission-lead">
+            Japolic is a lightweight, stateless routing layer enforcing protocol compliance between internal services. Making service boundaries explicit, deterministic, and verifiable across modern distributed architectures.
           </p>
-          <div class="status-chip" style="border-color: rgba(216,207,188,0.3); color: var(--c-footer-text);">
-            <span class="status-dot ok"></span>
-            <span>SYSTEM HEALTH: 100% OPERATIONAL</span>
+        </div>
+
+        <div class="footer-status-col">
+          <!-- "All systems operational" Live Indicator Card -->
+          <div class="footer-status-card" role="status" aria-live="polite">
+            <div class="status-reg-mark tl"></div>
+            <div class="status-reg-mark tr"></div>
+            <div class="status-reg-mark bl"></div>
+            <div class="status-reg-mark br"></div>
+
+            <div class="status-live-header">
+              <span class="status-pulse-dot" aria-hidden="true"></span>
+              <span class="status-live-title">ALL SYSTEMS OPERATIONAL</span>
+            </div>
+            
+            <div class="status-stats-grid">
+              <div class="status-stat-item">
+                <span class="status-stat-label">POLICY PLANE P99</span>
+                <span class="status-stat-value">&lt; 1.18ms</span>
+              </div>
+              <div class="status-stat-divider"></div>
+              <div class="status-stat-item">
+                <span class="status-stat-label">AUDIT AVAILABILITY</span>
+                <span class="status-stat-value">99.999%</span>
+              </div>
+            </div>
+
+            <div class="status-footer-bar">
+              <span class="status-cluster-id">CLUSTER: US-EAST-01 &middot; GOSSIP OK</span>
+              <a href="https://status.japolic.io" class="status-telemetry-link" target="_blank" rel="noopener">
+                Telemetry feed &nearr;
+              </a>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Col 1: Product -->
-        <div>
-          <div class="footer-col-title">Product</div>
+      <!-- 2. CTA / Engineering Newsletter Dispatch Row -->
+      <div class="footer-dispatch-row">
+        <div class="footer-dispatch-info">
+          <span class="dispatch-mono-tag">// ENGINEERING DISPATCH</span>
+          <h3 class="dispatch-headline">Protocol specifications &amp; security advisories.</h3>
+          <p class="dispatch-sub">
+            Direct notification upon formal boundary RFC revisions, Go/Rust SDK releases, and CVE patches. Zero marketing noise.
+          </p>
+        </div>
+        <div class="footer-dispatch-form-col">
+          <form id="footer-newsletter-form" class="dispatch-form" onsubmit="event.preventDefault(); document.getElementById('dispatch-success').style.display='block'; this.querySelector('input').disabled=true; this.querySelector('button').disabled=true; this.querySelector('button').textContent='Subscribed ✓';">
+            <div class="dispatch-input-row">
+              <input type="email" required placeholder="lead@company.internal" class="dispatch-input" aria-label="Work Email Address for Technical Dispatch">
+              <button type="submit" class="dispatch-btn">Subscribe &rarr;</button>
+            </div>
+            <div id="dispatch-success" class="dispatch-success-msg" style="display: none;">
+              &check; Subscribed to RFC advisories. Verification dispatch sent to your domain.
+            </div>
+            <span class="dispatch-meta-note">
+              No tracking pixels &middot; Unsubscribe with single signed HTTP DELETE request
+            </span>
+          </form>
+        </div>
+      </div>
+
+      <!-- 3. Four Ruled Link Columns -->
+      <div class="footer-nav-grid">
+        <!-- Col 1: Product & Spec -->
+        <div class="footer-nav-col">
+          <div class="footer-col-header">[ 01 // PRODUCT &amp; SPEC ]</div>
           <ul class="footer-links-list">
-            <li><a href="#solution" class="footer-link">Overview</a></li>
             <li><a href="#solution" class="footer-link">Protocol Arbitration</a></li>
-            <li><a href="#feature" class="footer-link">Policy Plane</a></li>
-            <li><a href="#solution" class="footer-link">Failure Routing</a></li>
-            <li><a href="#changelog" class="footer-link">Changelog</a></li>
+            <li><a href="#feature" class="footer-link">Declarative Policy Plane</a></li>
+            <li><a href="#problem" class="footer-link">Deterministic Failure Routing</a></li>
+            <li><a href="#use-cases" class="footer-link">Production Benchmarks</a></li>
+            <li><a href="#changelog" class="footer-link">Changelog &amp; RFC Revisions</a></li>
           </ul>
         </div>
 
-        <!-- Col 2: Developers -->
-        <div>
-          <div class="footer-col-title">Developers</div>
+        <!-- Col 2: Developers & SDKs -->
+        <div class="footer-nav-col">
+          <div class="footer-col-header">[ 02 // DEVELOPERS &amp; SDKS ]</div>
           <ul class="footer-links-list">
             <li><a href="#docs" class="footer-link">Documentation</a></li>
-            <li><a href="#protocol" class="footer-link">Protocol Reference</a></li>
-            <li><a href="#api" class="footer-link">API Reference</a></li>
-            <li><a href="#sdks" class="footer-link">SDKs</a></li>
-            <li><a href="#open-source" class="footer-link">Open Source</a></li>
+            <li><a href="#protocol" class="footer-link">Protocol Reference (RFC-4)</a></li>
+            <li><a href="#api" class="footer-link">API Specification</a></li>
+            <li><a href="#sdks" class="footer-link">Go SDK (<span class="code-pill">japolic-go</span>)</a></li>
+            <li><a href="#sdks" class="footer-link">Rust Crate (<span class="code-pill">japolic-rs</span>)</a></li>
+            <li><a href="#open-source" class="footer-link">Open Source Engine</a></li>
           </ul>
         </div>
 
-        <!-- Col 3: Company -->
-        <div>
-          <div class="footer-col-title">Company</div>
+        <!-- Col 3: System & Design -->
+        <div class="footer-nav-col">
+          <div class="footer-col-header">[ 03 // SYSTEM &amp; DESIGN ]</div>
           <ul class="footer-links-list">
-            <li><a href="#about" class="footer-link">About</a></li>
-            <li><a href="#blog" class="footer-link">Blog</a></li>
-            <li><a href="#security" class="footer-link">Security</a></li>
-            <li><a href="https://status.japolic.io" class="footer-link external" target="_blank" rel="noopener">Status &nearr;</a></li>
-            <li><a href="#contact" class="footer-link">Contact</a></li>
+            <li><a href="#about" class="footer-link">About Japolic</a></li>
+            <li><a href="direction.html" class="footer-link">Direction Board</a></li>
+            <li><a href="components.html" class="footer-link">Component Matrix</a></li>
+            <li><a href="assets.html" class="footer-link">SVG Asset Library</a></li>
+            <li><a href="#security" class="footer-link">Security Whitepaper</a></li>
           </ul>
         </div>
 
-        <!-- Col 4: Legal -->
-        <div>
-          <div class="footer-col-title">Legal</div>
+        <!-- Col 4: Governance & Legal -->
+        <div class="footer-nav-col">
+          <div class="footer-col-header">[ 04 // GOVERNANCE &amp; LEGAL ]</div>
           <ul class="footer-links-list">
             <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
             <li><a href="#terms" class="footer-link">Terms of Service</a></li>
-            <li><a href="#dpa" class="footer-link">Data Processing Agreement</a></li>
+            <li><a href="#dpa" class="footer-link">Data Processing (DPA)</a></li>
+            <li><a href="#security" class="footer-link">Responsible Disclosure</a></li>
+            <li><a href="#contact" class="footer-link">Contact Platform Team</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="footer-bottom">
-        <div>
-          &copy; 2026 Japolic, Inc. &middot; All rights reserved. Built to engineering specification.
+      <!-- 4. Bottom Bar: Socials & Legal Statement -->
+      <div class="footer-bottom-bar">
+        <div class="footer-copyright-col">
+          <span>&copy; 2026 Japolic, Inc. &middot; All rights reserved.</span>
+          <span class="footer-legal-tagline">Engineered to boundary specification &middot; Zero telemetry exfiltration.</span>
         </div>
-        <div class="footer-social-links">
-          <a href="https://github.com" class="footer-social-link" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://twitter.com" class="footer-social-link" target="_blank" rel="noopener">X / Twitter</a>
-          <a href="https://linkedin.com" class="footer-social-link" target="_blank" rel="noopener">LinkedIn</a>
+
+        <div class="footer-socials-col">
+          <a href="https://github.com" class="footer-social-pill" target="_blank" rel="noopener" aria-label="GitHub Repository">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+            <span>GitHub</span>
+          </a>
+          <a href="https://twitter.com" class="footer-social-pill" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4l11.733 16h4.267l-11.733-16z"/>
+              <path d="M4 20l6.768-6.768m2.464-2.464l6.768-6.768"/>
+            </svg>
+            <span>X / Twitter</span>
+          </a>
+          <a href="https://discord.com" class="footer-social-pill" target="_blank" rel="noopener" aria-label="Discord Community">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6h0a14.5 14.5 0 0 0-4-1.2 11.8 11.8 0 0 0-.5 1.2 13.5 13.5 0 0 0-3 0A11.8 11.8 0 0 0 10 4.8 14.5 14.5 0 0 0 6 6a16.6 16.6 0 0 0-3 12 14.6 14.6 0 0 0 4.5 2.2 11.6 11.6 0 0 0 1-1.6 9.5 9.5 0 0 1-1.5-.7l.3-.2a10.4 10.4 0 0 0 9.4 0l.3.2a9.5 9.5 0 0 1-1.5.7 11.6 11.6 0 0 0 1 1.6 14.6 14.6 0 0 0 4.5-2.2 16.6 16.6 0 0 0-3-12z"/>
+              <circle cx="9.5" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="14.5" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>Discord</span>
+          </a>
+          <a href="#rss" class="footer-social-pill" aria-label="RSS Feed">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 11a9 9 0 0 1 9 9"/>
+              <path d="M4 4a16 16 0 0 1 16 16"/>
+              <circle cx="5" cy="19" r="1"/>
+            </svg>
+            <span>RSS</span>
+          </a>
         </div>
       </div>
+
     </div>
   </footer>
 

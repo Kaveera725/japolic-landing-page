@@ -9,7 +9,7 @@ A Figma-ready, zero-framework web design system and landing page for **Japolic**
 
 | Artifact | File | Description |
 |---|---|---|
-| **Live Landing Page** | [`index.html`](file:///c:/Users/anush/OneDrive/Desktop/practicle%20DevOps/japolic/japolic-landing-page/index.html) | Full 6-section landing page (Nav, Hero, Problem, Solution, Feature, Use Cases, Footer). Responsive for 1440px desktop & 390px mobile. |
+| **Live Landing Page** | [`index.html`](file:///c:/Users/anush/OneDrive/Desktop/practicle%20DevOps/japolic/japolic-landing-page/index.html) | Full 6-section landing page (Nav, Hero, Problem, Solution, Feature Diagram, Ruled Use Cases Matrix, CTA, Footer). Responsive for 1440px desktop & 390px mobile. |
 | **Web-Direction Board** | [`direction.html`](file:///c:/Users/anush/OneDrive/Desktop/practicle%20DevOps/japolic/japolic-landing-page/direction.html) | Design system board: color contrast audit, type specimens, component specs, and studio critique matrix. |
 | **Component Matrix** | [`components.html`](file:///c:/Users/anush/OneDrive/Desktop/practicle%20DevOps/japolic/japolic-landing-page/components.html) | Full interactive state matrix for all UI components (default, hover, focus, active, disabled). |
 | **Component Styles** | [`components.css`](file:///c:/Users/anush/OneDrive/Desktop/practicle%20DevOps/japolic/japolic-landing-page/components.css) | Flat and tactile component library stylesheet (buttons, tags, code blocks, terminal, inputs, dividers). |
